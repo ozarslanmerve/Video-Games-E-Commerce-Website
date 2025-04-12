@@ -13,5 +13,7 @@ namespace VideoGames.Shared.DTOs
         public int Quantity { get; set; }
         public decimal TotalPrice => UnitPrice * Quantity;
 
+   
+       
     }
 }

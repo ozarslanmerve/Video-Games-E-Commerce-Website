@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace VideoGames.Data.Migrations
 {
     /// <inheritdoc />
@@ -343,6 +345,68 @@ namespace VideoGames.Data.Migrations
                         principalColumn: "ID");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "OrderItemCDKeys",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OrderItemId = table.Column<int>(type: "int", nullable: false),
+                    VideoGameCDkeyId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderItemCDKeys", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_OrderItemCDKeys_OrderItems_OrderItemId",
+                        column: x => x.OrderItemId,
+                        principalTable: "OrderItems",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OrderItemCDKeys_VideoGameCDkeys_VideoGameCDkeyId",
+                        column: x => x.VideoGameCDkeyId,
+                        principalTable: "VideoGameCDkeys",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Description", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "115c7796-cfac-44de-91b5-916eaae125b5", null, "Administrator role", "AdminUser", "ADMINUSER" },
+                    { "811f466c-9d06-43f8-a054-24aedbb4161b", null, "Regular user role", "NormalUser", "NORMALUSER" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "Address", "City", "ConcurrencyStamp", "DateOfBirth", "Email", "EmailConfirmed", "FirstName", "Gender", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[,]
+                {
+                    { "14a0183f-1e96-4930-a83d-6ef5f22d8c09", 0, "", "", "752a149b-d291-4234-8202-a55f340f9498", new DateTime(2025, 4, 11, 17, 0, 16, 382, DateTimeKind.Local).AddTicks(1818), "normaluser@gmail.com", true, "Normal", 1, "User", false, null, "NORMALUSER@GMAIL.COM", "NORMALUSER@GMAIL.COM", "AQAAAAIAAYagAAAAEKf6ePdF2k1ykIKRQWDDCIByWUsLLSUOHx9tYVwXvSZVgn6YboqEt63XOtZn+zVT8A==", "", false, "fad17716-868a-4c43-ab15-a8ceab1b2333", false, "normaluser@gmail.com" },
+                    { "c0b7fef7-df2b-4857-9b3d-bc8967ad19ac", 0, "", "", "aead8720-b359-409d-b51c-36fb5626473d", new DateTime(2025, 4, 11, 17, 0, 16, 332, DateTimeKind.Local).AddTicks(9706), "adminuser@gmail.com", true, "Admin", 1, "User", false, null, "ADMINUSER@GMAIL.COM", "ADMINUSER@GMAIL.COM", "AQAAAAIAAYagAAAAEKVF+gDIfOIKoLLs9MGW8HPOG8sZ4D/jsb8ftLN8C4Iix0oXiijOnIqOsgkLzD02bw==", "", false, "5f4c0365-2759-4e7c-83e1-41baa32819f1", false, "adminuser@gmail.com" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[,]
+                {
+                    { "811f466c-9d06-43f8-a054-24aedbb4161b", "14a0183f-1e96-4930-a83d-6ef5f22d8c09" },
+                    { "115c7796-cfac-44de-91b5-916eaae125b5", "c0b7fef7-df2b-4857-9b3d-bc8967ad19ac" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Carts",
+                columns: new[] { "ID", "ApplicationUserId" },
+                values: new object[,]
+                {
+                    { 1, "c0b7fef7-df2b-4857-9b3d-bc8967ad19ac" },
+                    { 2, "14a0183f-1e96-4930-a83d-6ef5f22d8c09" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -396,6 +460,16 @@ namespace VideoGames.Data.Migrations
                 name: "IX_Carts_ApplicationUserId",
                 table: "Carts",
                 column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItemCDKeys_OrderItemId",
+                table: "OrderItemCDKeys",
+                column: "OrderItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItemCDKeys_VideoGameCDkeyId",
+                table: "OrderItemCDKeys",
+                column: "VideoGameCDkeyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderItems_OrderId",
@@ -452,7 +526,7 @@ namespace VideoGames.Data.Migrations
                 name: "CartItems");
 
             migrationBuilder.DropTable(
-                name: "OrderItems");
+                name: "OrderItemCDKeys");
 
             migrationBuilder.DropTable(
                 name: "VideoGameCategory");
@@ -464,13 +538,16 @@ namespace VideoGames.Data.Migrations
                 name: "Carts");
 
             migrationBuilder.DropTable(
+                name: "OrderItems");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
+
+            migrationBuilder.DropTable(
                 name: "Orders");
 
             migrationBuilder.DropTable(
                 name: "VideoGameCDkeys");
-
-            migrationBuilder.DropTable(
-                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

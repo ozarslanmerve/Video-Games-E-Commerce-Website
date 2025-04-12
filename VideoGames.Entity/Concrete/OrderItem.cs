@@ -18,7 +18,10 @@ namespace VideoGames.Entity.Concrete
         public VideoGameCDkey VideoGameCDkey { get; set; } // Navigasyon
         public decimal UnitPrice { get; set; }
         public int Quantity { get; set; }
-            
-        
+
+        public ICollection<OrderItemCDKey> OrderItemCDKeys { get; set; }
+
+
+
     }
 }

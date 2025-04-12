@@ -32,14 +32,14 @@ namespace VideoGames.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CategoryCreateDTO categoryCreateDTO)
+        public async Task<IActionResult> Create(CategoryCreateDTO categoryCreateDTO)
         {
             var response = await _categoryService.AddAsync(categoryCreateDTO);
             return CreateResponse(response);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] CategoryUpdateDTO categoryUpdateDTO)
+        public async Task<IActionResult> Update(CategoryUpdateDTO categoryUpdateDTO)
         {
             var response = await _categoryService.UpdateAsync(categoryUpdateDTO);
             return CreateResponse(response);

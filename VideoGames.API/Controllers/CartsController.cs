@@ -9,11 +9,11 @@ namespace VideoGames.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CartController : CustomControllerBase
+    public class CartsController : CustomControllerBase
     {
         private readonly ICartService _cartService;
 
-        public CartController(ICartService cartService)
+        public CartsController(ICartService cartService)
         {
             _cartService = cartService;
         }

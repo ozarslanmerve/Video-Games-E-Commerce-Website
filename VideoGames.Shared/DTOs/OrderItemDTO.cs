@@ -14,7 +14,7 @@ namespace VideoGames.Shared.DTOs
         public VideoGameDTO VideoGame { get; set; }
         public decimal UnitPrice { get; set; }
         public int Quantity { get; set; }
-        public string VideoGameCDkey { get; set; }  
+        public List<string> CDKeys { get; set; }
 
     }
 }

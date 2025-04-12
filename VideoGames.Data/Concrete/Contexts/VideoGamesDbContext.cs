@@ -24,8 +24,8 @@ namespace VideoGames.Data.Concrete.Contexts
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<VideoGame> VideoGames { get; set; }
-
         public DbSet<VideoGameCDkey> VideoGameCDkeys { get; set; }
+        public DbSet<OrderItemCDKey> OrderItemCDKeys { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -99,61 +99,78 @@ namespace VideoGames.Data.Concrete.Contexts
                       .HasColumnType("decimal(10,2)");
             });
 
+            builder.Entity<OrderItemCDKey>(entity =>
+            {
+                entity.HasKey(x => x.ID);
 
-            //builder.Entity<ApplicationRole>().HasData(
-            //    new ApplicationRole { Id = "115c7796-cfac-44de-91b5-916eaae125b5", Name = "AdminUser", NormalizedName = "ADMINUSER", Description = "Administrator role" },
-            //    new ApplicationRole { Id = "811f466c-9d06-43f8-a054-24aedbb4161b", Name = "NormalUser", NormalizedName = "NORMALUSER", Description = "Regular user role" }
-            //);
+                
+                entity.HasOne(x => x.OrderItem)
+                      .WithMany((x => x.OrderItemCDKeys)) 
+                      .HasForeignKey(x => x.OrderItemId) 
+                      .OnDelete(DeleteBehavior.Cascade); 
 
-            //var hasher = new PasswordHasher<ApplicationUser>();
-            //var adminUser = new ApplicationUser
-            //{
-            //    Id = "c0b7fef7-df2b-4857-9b3d-bc8967ad19ac",
-            //    UserName = "adminuser@gmail.com",
-            //    NormalizedUserName = "ADMINUSER@GMAIL.COM",
-            //    Email = "adminuser@gmail.com",
-            //    NormalizedEmail = "ADMINUSER@GMAIL.COM",
-            //    EmailConfirmed = true,
-            //    FirstName = "Admin",
-            //    LastName = "User",
-            //    Address = "",
-            //    PhoneNumber = "",
-            //    City = "",
-            //    DateOfBirth = DateTime.Now,
-            //    Gender = GenderType.None,
-            //    PasswordHash = hasher.HashPassword(null, "Qwe123.,")
-            //};
-            //var normalUser = new ApplicationUser
-            //{
-            //    Id = "14a0183f-1e96-4930-a83d-6ef5f22d8c09",
-            //    UserName = "normaluser@gmail.com",
-            //    NormalizedUserName = "NORMALUSER@GMAIL.COM",
-            //    Email = "normaluser@gmail.com",
-            //    NormalizedEmail = "NORMALUSER@GMAIL.COM",
-            //    EmailConfirmed = true,
-            //    FirstName = "Normal",
-            //    LastName = "User",
-            //    Address = "",
-            //    PhoneNumber = "",
-            //    City = "",
-            //    DateOfBirth = DateTime.Now,
-            //    Gender = GenderType.None,
-            //    PasswordHash = hasher.HashPassword(null, "Qwe123.,")
-            //};
-            //builder.Entity<ApplicationUser>().HasData(adminUser, normalUser);
+              
+                entity.HasOne(x => x.VideoGameCDkey)
+                      .WithMany()
+                      .HasForeignKey(x => x.VideoGameCDkeyId)
+                      .OnDelete(DeleteBehavior.Restrict); 
+            });
 
+            // Default roles
+            builder.Entity<ApplicationRole>().HasData(
+                new ApplicationRole { Id = "115c7796-cfac-44de-91b5-916eaae125b5", Name = "AdminUser", NormalizedName = "ADMINUSER", Description = "Administrator role" },
+                new ApplicationRole { Id = "811f466c-9d06-43f8-a054-24aedbb4161b", Name = "NormalUser", NormalizedName = "NORMALUSER", Description = "Regular user role" }
+            );
 
-            //builder.Entity<IdentityUserRole<string>>().HasData(
-            //    new IdentityUserRole<string> { UserId = adminUser.Id, RoleId = "115c7796-cfac-44de-91b5-916eaae125b5" },
-            //    new IdentityUserRole<string> { UserId = normalUser.Id, RoleId = "811f466c-9d06-43f8-a054-24aedbb4161b" }
-            //);
+            // Default users
+            var hasher = new PasswordHasher<ApplicationUser>();
+            var adminUser = new ApplicationUser
+            {
+                Id = "c0b7fef7-df2b-4857-9b3d-bc8967ad19ac",
+                UserName = "adminuser@gmail.com",
+                NormalizedUserName = "ADMINUSER@GMAIL.COM",
+                Email = "adminuser@gmail.com",
+                NormalizedEmail = "ADMINUSER@GMAIL.COM",
+                EmailConfirmed = true,
+                FirstName = "Admin",
+                LastName = "User",
+                Address = "",
+                PhoneNumber = "",
+                City = "",
+                DateOfBirth = DateTime.Now,
+                Gender = GenderType.None,
+                PasswordHash = hasher.HashPassword(null, "Qwe123.,")
+            };
+            var normalUser = new ApplicationUser
+            {
+                Id = "14a0183f-1e96-4930-a83d-6ef5f22d8c09",
+                UserName = "normaluser@gmail.com",
+                NormalizedUserName = "NORMALUSER@GMAIL.COM",
+                Email = "normaluser@gmail.com",
+                NormalizedEmail = "NORMALUSER@GMAIL.COM",
+                EmailConfirmed = true,
+                FirstName = "Normal",
+                LastName = "User",
+                Address = "",
+                PhoneNumber = "",
+                City = "",
+                DateOfBirth = DateTime.Now,
+                Gender = GenderType.None,
+                PasswordHash = hasher.HashPassword(null, "Qwe123.,")
+            };
+            builder.Entity<ApplicationUser>().HasData(adminUser, normalUser);
 
-            //builder.Entity<Cart>().HasData(
-            //    new Cart { ID = 1, ApplicationUserId = adminUser.Id },
-            //    new Cart { ID = 2, ApplicationUserId = normalUser.Id }
-            //);
+            // Assign roles to users
+            builder.Entity<IdentityUserRole<string>>().HasData(
+                new IdentityUserRole<string> { UserId = adminUser.Id, RoleId = "115c7796-cfac-44de-91b5-916eaae125b5" },
+                new IdentityUserRole<string> { UserId = normalUser.Id, RoleId = "811f466c-9d06-43f8-a054-24aedbb4161b" }
+            );
 
-
+            builder.Entity<Cart>().HasData(
+                new Cart { ID = 1, ApplicationUserId = adminUser.Id },
+                new Cart { ID = 2, ApplicationUserId = normalUser.Id }
+            );
         }
+
     }
 }

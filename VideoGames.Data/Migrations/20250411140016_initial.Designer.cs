@@ -12,7 +12,7 @@ using VideoGames.Data.Concrete.Contexts;
 namespace VideoGames.Data.Migrations
 {
     [DbContext(typeof(VideoGamesDbContext))]
-    [Migration("20250408154810_initial")]
+    [Migration("20250411140016_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -110,6 +110,18 @@ namespace VideoGames.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "c0b7fef7-df2b-4857-9b3d-bc8967ad19ac",
+                            RoleId = "115c7796-cfac-44de-91b5-916eaae125b5"
+                        },
+                        new
+                        {
+                            UserId = "14a0183f-1e96-4930-a83d-6ef5f22d8c09",
+                            RoleId = "811f466c-9d06-43f8-a054-24aedbb4161b"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -160,6 +172,22 @@ namespace VideoGames.Data.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "115c7796-cfac-44de-91b5-916eaae125b5",
+                            Description = "Administrator role",
+                            Name = "AdminUser",
+                            NormalizedName = "ADMINUSER"
+                        },
+                        new
+                        {
+                            Id = "811f466c-9d06-43f8-a054-24aedbb4161b",
+                            Description = "Regular user role",
+                            Name = "NormalUser",
+                            NormalizedName = "NORMALUSER"
+                        });
                 });
 
             modelBuilder.Entity("VideoGames.Entity.Concrete.ApplicationUser", b =>
@@ -247,6 +275,54 @@ namespace VideoGames.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "c0b7fef7-df2b-4857-9b3d-bc8967ad19ac",
+                            AccessFailedCount = 0,
+                            Address = "",
+                            City = "",
+                            ConcurrencyStamp = "aead8720-b359-409d-b51c-36fb5626473d",
+                            DateOfBirth = new DateTime(2025, 4, 11, 17, 0, 16, 332, DateTimeKind.Local).AddTicks(9706),
+                            Email = "adminuser@gmail.com",
+                            EmailConfirmed = true,
+                            FirstName = "Admin",
+                            Gender = 1,
+                            LastName = "User",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMINUSER@GMAIL.COM",
+                            NormalizedUserName = "ADMINUSER@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEKVF+gDIfOIKoLLs9MGW8HPOG8sZ4D/jsb8ftLN8C4Iix0oXiijOnIqOsgkLzD02bw==",
+                            PhoneNumber = "",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "5f4c0365-2759-4e7c-83e1-41baa32819f1",
+                            TwoFactorEnabled = false,
+                            UserName = "adminuser@gmail.com"
+                        },
+                        new
+                        {
+                            Id = "14a0183f-1e96-4930-a83d-6ef5f22d8c09",
+                            AccessFailedCount = 0,
+                            Address = "",
+                            City = "",
+                            ConcurrencyStamp = "752a149b-d291-4234-8202-a55f340f9498",
+                            DateOfBirth = new DateTime(2025, 4, 11, 17, 0, 16, 382, DateTimeKind.Local).AddTicks(1818),
+                            Email = "normaluser@gmail.com",
+                            EmailConfirmed = true,
+                            FirstName = "Normal",
+                            Gender = 1,
+                            LastName = "User",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "NORMALUSER@GMAIL.COM",
+                            NormalizedUserName = "NORMALUSER@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEKf6ePdF2k1ykIKRQWDDCIByWUsLLSUOHx9tYVwXvSZVgn6YboqEt63XOtZn+zVT8A==",
+                            PhoneNumber = "",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "fad17716-868a-4c43-ab15-a8ceab1b2333",
+                            TwoFactorEnabled = false,
+                            UserName = "normaluser@gmail.com"
+                        });
                 });
 
             modelBuilder.Entity("VideoGames.Entity.Concrete.Cart", b =>
@@ -266,6 +342,18 @@ namespace VideoGames.Data.Migrations
                     b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Carts");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = 1,
+                            ApplicationUserId = "c0b7fef7-df2b-4857-9b3d-bc8967ad19ac"
+                        },
+                        new
+                        {
+                            ID = 2,
+                            ApplicationUserId = "14a0183f-1e96-4930-a83d-6ef5f22d8c09"
+                        });
                 });
 
             modelBuilder.Entity("VideoGames.Entity.Concrete.CartItem", b =>
@@ -380,6 +468,29 @@ namespace VideoGames.Data.Migrations
                     b.HasIndex("VideoGameId");
 
                     b.ToTable("OrderItems");
+                });
+
+            modelBuilder.Entity("VideoGames.Entity.Concrete.OrderItemCDKey", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int>("OrderItemId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VideoGameCDkeyId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("OrderItemId");
+
+                    b.HasIndex("VideoGameCDkeyId");
+
+                    b.ToTable("OrderItemCDKeys");
                 });
 
             modelBuilder.Entity("VideoGames.Entity.Concrete.VideoGame", b =>
@@ -580,6 +691,25 @@ namespace VideoGames.Data.Migrations
                     b.Navigation("VideoGameCDkey");
                 });
 
+            modelBuilder.Entity("VideoGames.Entity.Concrete.OrderItemCDKey", b =>
+                {
+                    b.HasOne("VideoGames.Entity.Concrete.OrderItem", "OrderItem")
+                        .WithMany("OrderItemCDKeys")
+                        .HasForeignKey("OrderItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("VideoGames.Entity.Concrete.VideoGameCDkey", "VideoGameCDkey")
+                        .WithMany()
+                        .HasForeignKey("VideoGameCDkeyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("OrderItem");
+
+                    b.Navigation("VideoGameCDkey");
+                });
+
             modelBuilder.Entity("VideoGames.Entity.Concrete.VideoGameCDkey", b =>
                 {
                     b.HasOne("VideoGames.Entity.Concrete.VideoGame", "VideoGame")
@@ -623,6 +753,11 @@ namespace VideoGames.Data.Migrations
             modelBuilder.Entity("VideoGames.Entity.Concrete.Order", b =>
                 {
                     b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("VideoGames.Entity.Concrete.OrderItem", b =>
+                {
+                    b.Navigation("OrderItemCDKeys");
                 });
 
             modelBuilder.Entity("VideoGames.Entity.Concrete.VideoGame", b =>

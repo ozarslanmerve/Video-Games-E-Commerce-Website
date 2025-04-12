@@ -17,7 +17,7 @@ namespace VideoGames.Entity.Concrete
         public bool HasAgeLimit { get; set; }
         public string ImageUrl { get; set; }
         public ICollection<VideoGameCategory> VideoGameCategories { get; set; } = new HashSet<VideoGameCategory>();
-        public ICollection<VideoGameCDkey> CDkeys { get; set; } = new HashSet<VideoGameCDkey>(); // 💡 CDKey ilişkisi
+        public ICollection<VideoGameCDkey> CDkeys { get; set; } = new HashSet<VideoGameCDkey>(); 
 
     }
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using VideoGames.Business.Abstract;
 using VideoGames.Shared.DTOs;
@@ -17,6 +18,18 @@ namespace VideoGames.API.Controllers
             _videoGameService = videoGameService;
         }
 
+
+
+        [HttpPost("add")]
+        public async Task<IActionResult> CreateVideoGame(VideoGameCreateDTO videoGameCreateDTO)
+        {
+            var response = await _videoGameService.AddAsync(videoGameCreateDTO);
+            return CreateResponse(response);
+        }
+
+
+
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -30,6 +43,8 @@ namespace VideoGames.API.Controllers
             var response = await _videoGameService.GetAllDetailedAsync();
             return CreateResponse(response);
         }
+
+
 
         [HttpGet("get/{id}")]
         public async Task<IActionResult> GetById(int id)

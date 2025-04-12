@@ -2,7 +2,7 @@
 using VideoGames.Entity.Concrete;
 using VideoGames.Shared.DTOs;
 
-namespace VideoGames.Business.Configuration
+namespace VideoGames.Business
 {
     public class MappingProfile : Profile
     {
@@ -66,10 +66,10 @@ namespace VideoGames.Business.Configuration
             #endregion
 
             #region Order
-
             CreateMap<OrderItem, OrderItemDTO>()
                 .ForMember(dest => dest.VideoGame, opt => opt.MapFrom(src => src.VideoGame))
-                .ForMember(dest => dest.VideoGameCDkey, opt => opt.MapFrom(src => src.VideoGameCDkey.CDkey))
+                .ForMember(dest => dest.CDKeys, opt => opt.MapFrom(src => src.OrderItemCDKeys
+                    .Select(oick => oick.VideoGameCDkey.CDkey)))
                 .ReverseMap();
 
             CreateMap<OrderItem, OrderItemCreateDTO>().ReverseMap();

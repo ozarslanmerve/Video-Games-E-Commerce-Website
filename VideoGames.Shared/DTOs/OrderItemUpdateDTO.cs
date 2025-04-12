@@ -13,6 +13,8 @@ namespace VideoGames.Shared.DTOs
         public int VideoGameId { get; set; }
         public decimal UnitPrice { get; set; }
         public int Quantity { get; set; }
+
+        public string VideoGameCDkey { get; set; }
         public decimal TotalPrice => UnitPrice * Quantity;
     }
 }

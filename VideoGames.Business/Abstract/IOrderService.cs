@@ -17,7 +17,6 @@ namespace VideoGames.Business.Abstract
         Task<ResponseDTO<IEnumerable<OrderDTO>>> GetOrdersAsync(DateTime startDate, DateTime endDate);
 
         Task<ResponseDTO<OrderDTO>> CreateOrderAsync(OrderCreateDTO orderCreateDTO);
-        Task<ResponseDTO<NoContent>> UpdateOrderAsync(OrderUpdateDTO orderUpdateDTO);
         Task<ResponseDTO<NoContent>> DeleteOrderAsync(int id);
 
         Task<ResponseDTO<string>> GetOrderStatusAsync(int id);

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using VideoGames.Business.Abstract;
 using VideoGames.Shared.DTOs;
 using VideoGames.Shared.Helpers;
@@ -16,13 +17,15 @@ namespace VideoGames.API.Controllers
             _videoGameService = videoGameService;
         }
 
-        [HttpGet("{videoGameId}/cdkeys")]
+        [Authorize(Roles = "AdminUser")]
+        [HttpGet("{videoGameId}")]
         public async Task<IActionResult> GetCDkeysByGameId(int videoGameId)
         {
             var response = await _videoGameService.GetCDkeysByGameIdAsync(videoGameId);
             return CreateResponse(response);
         }
 
+        [Authorize(Roles = "AdminUser")]
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] VideoGameCDkeyAddDTO dto)
         {
@@ -30,6 +33,7 @@ namespace VideoGames.API.Controllers
             return CreateResponse(response);
         }
 
+        [Authorize(Roles = "AdminUser")]
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] VideoGameCDkeyUpdateDTO dto)
         {
@@ -37,6 +41,7 @@ namespace VideoGames.API.Controllers
             return CreateResponse(response);
         }
 
+        [Authorize(Roles = "AdminUser")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using VideoGames.Business.Abstract;
@@ -19,6 +20,7 @@ namespace VideoGames.API.Controllers
             _orderService = orderService;
         }
 
+        [Authorize(Roles = "AdminUser")]
         [HttpPost]
         public async Task<IActionResult> Create(OrderCreateDTO orderCreateDTO)
         {

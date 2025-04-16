@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Runtime.CompilerServices;
 using VideoGames.Business.Abstract;
 using VideoGames.Shared.DTOs;
 using VideoGames.Shared.Helpers;
@@ -18,6 +18,7 @@ namespace VideoGames.API.Controllers
             _cartService = cartService;
         }
 
+        [Authorize(Roles = "AdminUser")]
         [HttpGet("{applicationUserId}")]
         public async Task<IActionResult> GetCartByUser(string applicationUserId)
         {

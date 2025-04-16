@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using VideoGames.Business.Abstract;
 using VideoGames.Shared.DTOs;
@@ -23,7 +24,7 @@ namespace VideoGames.API.Controllers
             var response = await _categoryService.GetAllAsync();
             return CreateResponse(response);
         }
-
+        [Authorize(Roles = "AdminUser")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -31,6 +32,7 @@ namespace VideoGames.API.Controllers
             return CreateResponse(response);
         }
 
+        [Authorize(Roles = "AdminUser")]
         [HttpPost]
         public async Task<IActionResult> Create(CategoryCreateDTO categoryCreateDTO)
         {
@@ -38,6 +40,7 @@ namespace VideoGames.API.Controllers
             return CreateResponse(response);
         }
 
+        [Authorize(Roles = "AdminUser")]
         [HttpPut]
         public async Task<IActionResult> Update(CategoryUpdateDTO categoryUpdateDTO)
         {
@@ -45,6 +48,7 @@ namespace VideoGames.API.Controllers
             return CreateResponse(response);
         }
 
+        [Authorize(Roles = "AdminUser")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

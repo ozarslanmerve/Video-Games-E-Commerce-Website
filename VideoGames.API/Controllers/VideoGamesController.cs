@@ -19,7 +19,7 @@ namespace VideoGames.API.Controllers
         }
 
 
-
+        [Authorize(Roles = "AdminUser")]
         [HttpPost("add")]
         public async Task<IActionResult> CreateVideoGame(VideoGameCreateDTO videoGameCreateDTO)
         {
@@ -29,7 +29,6 @@ namespace VideoGames.API.Controllers
 
 
 
-        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -37,6 +36,7 @@ namespace VideoGames.API.Controllers
             return CreateResponse(response);
         }
 
+        [Authorize(Roles = "AdminUser")]
         [HttpGet("alldetailed")]
         public async Task<IActionResult> GetAllDetailed()
         {
@@ -45,7 +45,7 @@ namespace VideoGames.API.Controllers
         }
 
 
-
+        [Authorize(Roles = "AdminUser")]
         [HttpGet("get/{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -53,12 +53,6 @@ namespace VideoGames.API.Controllers
             return CreateResponse(response);
         }
 
-        [HttpGet("admin/{id}")]
-        public async Task<IActionResult> GetDetailsForAdmin(int id)
-        {
-            var response = await _videoGameService.GetWithCategoriesAsync(id);
-            return CreateResponse(response);
-        }
 
         [HttpGet("bycategory/{categoryId}")]
         public async Task<IActionResult> GetByCategory(int categoryId)
@@ -67,6 +61,7 @@ namespace VideoGames.API.Controllers
             return CreateResponse(response);
         }
 
+        [Authorize(Roles = "AdminUser")]
         [HttpPut]
         public async Task<IActionResult> Update([FromForm] VideoGameUpdateDTO videoGameUpdateDTO)
         {
@@ -88,6 +83,7 @@ namespace VideoGames.API.Controllers
             return CreateResponse(response);
         }
 
+        [Authorize(Roles = "AdminUser")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

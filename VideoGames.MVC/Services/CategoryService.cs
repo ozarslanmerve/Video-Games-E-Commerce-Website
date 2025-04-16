@@ -1,6 +1,4 @@
-﻿using ECommerce.MVC.Abstract;
-using System.Net.Http.Json;
-using System.Text.Json;
+﻿using System.Text.Json;
 using VideoGames.MVC.Abstract;
 using VideoGames.MVC.Models;
 
@@ -15,14 +13,40 @@ namespace VideoGames.MVC.Services
 
         public async Task<IEnumerable<CategoryModel>> GetCategoriesAsync()
         {
-            var client = GetHttpClient();
-            var response = await client.GetAsync("categories");
-            var json = await response.Content.ReadAsStringAsync();
+            try
+            {
+                var client = GetHttpClient();
+                var response = await client.GetAsync("categories");
+                var jsonString = await response.Content.ReadAsStringAsync();
 
-            var result = JsonSerializer.Deserialize<ResponseModel<IEnumerable<CategoryModel>>>(json, _jsonSerializerOptions);
-            return result?.Data ?? new List<CategoryModel>();
+                ResponseModel<IEnumerable<CategoryModel>> result;
+
+                try
+                {
+                    result = JsonSerializer.Deserialize<ResponseModel<IEnumerable<CategoryModel>>>(jsonString, _jsonSerializerOptions);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Json Deserialize Error: {ex.Message}");
+                    return new List<CategoryModel>();
+                }
+
+                if (result != null && (result.Errors == null || result.Errors.Count == 0))
+                {
+                    return result.Data;
+                }
+                else
+                {
+                    Console.WriteLine($"Request Error: {result.Errors}");
+                    return new List<CategoryModel>();
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Http Request Ex: {ex.Message}");
+                return new List<CategoryModel>();
+            }
         }
-
         public async Task<CategoryModel> GetCategoryAsync(int id)
         {
             var client = GetHttpClient();

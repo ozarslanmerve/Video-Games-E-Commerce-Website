@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using VideoGames.Business.Abstract;
 using VideoGames.Shared.DTOs;
@@ -24,6 +23,7 @@ namespace VideoGames.API.Controllers
             var response = await _categoryService.GetAllAsync();
             return CreateResponse(response);
         }
+
         [Authorize(Roles = "AdminUser")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)

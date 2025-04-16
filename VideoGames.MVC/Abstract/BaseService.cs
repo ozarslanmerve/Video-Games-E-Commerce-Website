@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using System.Text.Json;
 
-namespace ECommerce.MVC.Abstract
+namespace VideoGames.MVC.Abstract
 {
     public abstract class BaseService
     {

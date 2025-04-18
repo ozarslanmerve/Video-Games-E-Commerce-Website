@@ -80,21 +80,31 @@ namespace VideoGames.MVC.Controllers
                                 ExpiresUtc = response.Data.ExpirationDate,
                                 IsPersistent = true
                             });
-                        // Bekleyen sepete ekleme işlemi
                         if (TempData["PendingVideoGameId"] != null && TempData["PendingQuantity"] != null)
                         {
                             string returnController = TempData["ReturnController"] as string ?? string.Empty;
                             string returnAction = TempData["ReturnAction"] as string ?? string.Empty;
                             int pendingVideoGameId = TempData["PendingVideoGameId"] as int? ?? 0;
                             int pendingQuantity = TempData["PendingQuantity"] as int? ?? 0;
-                            return RedirectToAction(returnAction, returnController, new
+
+                            // 🔥 EKLE: Giriş yaptıktan sonra sepete geri ekle
+                            await _cartService.AddVideoGameToCartAsync(new CartItemCreateModel
                             {
-                                videoGameId = pendingVideoGameId,
-                                quantity = pendingQuantity,
+                                CartId = await _cartService.GetCartIdByUserIdAsync(userId), // userId token'dan gelmişti
+                                VideoGameId = pendingVideoGameId,
+                                Quantity = pendingQuantity
                             });
+
+                            return RedirectToAction(returnAction, returnController);
                         }
-                    }
-                    // Sepete ekleme ile ilgili bir çalışmayı burada daha sonra yapacağız
+
+
+                        await _cartService.AddVideoGameToCartAsync(new CartItemCreateModel
+                    {
+                        CartId = userCartId, // Bu userId'den bulunur
+                        VideoGameId = pendingVideoGameId,
+                        Quantity = pendingQuantity
+                    });
                     _toaster.AddSuccessToastMessage("Giriş İşlemi Başarıyla Tamamlandı");
                     return RedirectToAction("Index", "Home");
                 }

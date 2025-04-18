@@ -23,7 +23,7 @@ namespace VideoGames.MVC.Services
         public async Task<ResponseModel<string>> RegisterAsnyc(RegisterModel registerModel)
         {
             var client = GetHttpClient();
-            var response = await client.PostAsJsonAsync("authorization/register", registerModel);
+            var response = await client.PostAsJsonAsync("Authorization/register", registerModel);
             var responseBody = await response.Content.ReadAsStringAsync();
             var result = JsonSerializer.Deserialize<ResponseModel<string>>(responseBody, _jsonSerializerOptions);
             return result;

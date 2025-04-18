@@ -40,7 +40,7 @@ namespace VideoGames.API.Controllers
             return CreateResponse(response);
         }
 
-        [HttpDelete("item/{cartItemId}")]
+        [HttpDelete("removefromcart/{cartItemId}")]
         public async Task<IActionResult> RemoveFromCart(int cartItemId)
         {
             var response = await _cartService.RemoveVideoGameFromCartAsync(cartItemId);

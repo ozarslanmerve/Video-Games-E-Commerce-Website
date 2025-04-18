@@ -14,7 +14,7 @@ namespace VideoGames.MVC.Services
         public async Task<ResponseModel<TokenModel>> LoginAsync(LoginModel loginModel)
         {
             var client = GetHttpClient();
-            var response = await client.PostAsJsonAsync("auth/login", loginModel);
+            var response = await client.PostAsJsonAsync("Authorization/login", loginModel);
             var responseBody = await response.Content.ReadAsStringAsync();
             var result = JsonSerializer.Deserialize<ResponseModel<TokenModel>>(responseBody, _jsonSerializerOptions);
             return result;
@@ -23,7 +23,7 @@ namespace VideoGames.MVC.Services
         public async Task<ResponseModel<string>> RegisterAsnyc(RegisterModel registerModel)
         {
             var client = GetHttpClient();
-            var response = await client.PostAsJsonAsync("auth/register", registerModel);
+            var response = await client.PostAsJsonAsync("authorization/register", registerModel);
             var responseBody = await response.Content.ReadAsStringAsync();
             var result = JsonSerializer.Deserialize<ResponseModel<string>>(responseBody, _jsonSerializerOptions);
             return result;

@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
 using NToastNotify;
+using VideoGames.MVC.Abstract;
+using VideoGames.MVC.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,17 +10,21 @@ builder.Services
     .AddControllersWithViews()
     .AddNToastNotifyToastr(new ToastrOptions
     {
-        ProgressBar = true, // ilerleme çubuðu
-        PositionClass = ToastPositions.TopRight,// pozisyon
-        CloseButton = true, // kapatma butonu
-        TimeOut = 5000, // süresi 5 sn
-        ShowDuration = 1000, // açýlýrken silikten görünür hale geçme süresi
-        HideDuration = 1000, // kapanýrken silik hale geçme süresi
-        ShowEasing = "swing", // açýlma efekti
-        HideEasing = "linear", // 
-        ShowMethod = "fadeIn", // görünür olma olayý
-        HideMethod = "fadeOut" // kapanma olayý
+        ProgressBar = true, 
+        PositionClass = ToastPositions.TopRight,
+        CloseButton = true, 
+        TimeOut = 5000, 
+        ShowDuration = 1000, 
+        HideDuration = 1000, 
+        ShowEasing = "swing", 
+        HideEasing = "linear", 
+        ShowMethod = "fadeIn", 
+        HideMethod = "fadeOut" 
     });
+
+builder.Services.AddScoped<IVideoGameService, VideoGameService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 
 builder
@@ -33,8 +39,8 @@ builder
     .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.Cookie.Name = "VideoGames.Authorization";
-        options.LoginPath = "/Authorization/Login";
+        options.Cookie.Name = "VideoGames.Auth";
+        options.LoginPath = "/Auth/Login";
         options.AccessDeniedPath = "/Auth/AccessDenied"; // yetkisiz sayfa
         options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
         options.Cookie.HttpOnly = true; // sadece Http protokolü üzerine istek alsýn
@@ -46,7 +52,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddDataProtection()
     .PersistKeysToFileSystem(new DirectoryInfo(Path.Combine(
         builder.Environment.ContentRootPath, "keys")))
-    .SetApplicationName("ECommerce.MVC")
+    .SetApplicationName("VideoGames.MVC")
     .SetDefaultKeyLifetime(TimeSpan.FromDays(14));
 builder.Services.AddDistributedMemoryCache();
 #endregion
@@ -65,10 +71,20 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
+app.UseNToastNotify();
+
+app.MapAreaControllerRoute(
+    name: "admin",
+    areaName: "Admin",
+    pattern: "Admin/{controller=Home}/{action=Index}/{id?}",
+    defaults: new { area = "Admin" });
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+

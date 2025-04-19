@@ -9,7 +9,7 @@ namespace VideoGames.MVC.Abstract
         Task<VideoGameModel> GetAsync(int id);
         Task<int> CountAsync();
         Task<int> CountByCategoryAsync(int categoryId);
-        Task<VideoGameModel> AddAsync(VideoGameModel model);
+        Task<VideoGameModel> AddAsync(VideoGameCreateModel model);
         Task UpdateAsync(VideoGameModel model);
         Task DeleteAsync(int id);
     }

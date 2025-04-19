@@ -10,9 +10,9 @@ namespace VideoGames.Shared.ComplexTypes
     {
         Pending = 0, // Beklemede
 		Processing = 1, // İşleniyor
-		Delivered = 3, // Teslim Edildi
-		Cancelled = 4, // İptal Edildi
-		Returned = 5, // İade Edildi
-		Failed = 6 // Başarısız
+		Delivered = 2, // Teslim Edildi
+		Cancelled = 3, // İptal Edildi
+		Returned = 4, // İade Edildi
+		Failed = 5// Başarısız
     }
 }

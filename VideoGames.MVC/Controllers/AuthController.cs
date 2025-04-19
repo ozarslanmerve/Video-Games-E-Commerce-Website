@@ -13,11 +13,13 @@ namespace VideoGames.MVC.Controllers
     {
         private readonly IAuthService _authService;
         private readonly IToastNotification _toaster;
+        private readonly ICartService _cartService;
 
-        public AuthController(IAuthService authService, IToastNotification toaster)
+        public AuthController(IAuthService authService, IToastNotification toaster, ICartService cartService)
         {
             _authService = authService;
             _toaster = toaster;
+            _cartService = cartService;
         }
 
         public IActionResult Index()
@@ -87,24 +89,24 @@ namespace VideoGames.MVC.Controllers
                             int pendingVideoGameId = TempData["PendingVideoGameId"] as int? ?? 0;
                             int pendingQuantity = TempData["PendingQuantity"] as int? ?? 0;
 
-                            // 🔥 EKLE: Giriş yaptıktan sonra sepete geri ekle
-                            await _cartService.AddVideoGameToCartAsync(new CartItemCreateModel
+                            
+                            var cart = await _cartService.GetCartAsync(userId);
+
+                            if (cart != null)
                             {
-                                CartId = await _cartService.GetCartIdByUserIdAsync(userId), // userId token'dan gelmişti
-                                VideoGameId = pendingVideoGameId,
-                                Quantity = pendingQuantity
-                            });
+                               
+                                await _cartService.AddToCartAsync(new CartItemModel
+                                {
+                                    CartId = cart.Id,
+                                    VideoGameId = pendingVideoGameId,
+                                    Quantity = pendingQuantity
+                                });
+                            }
 
                             return RedirectToAction(returnAction, returnController);
                         }
+                    }
 
-
-                        await _cartService.AddVideoGameToCartAsync(new CartItemCreateModel
-                    {
-                        CartId = userCartId, // Bu userId'den bulunur
-                        VideoGameId = pendingVideoGameId,
-                        Quantity = pendingQuantity
-                    });
                     _toaster.AddSuccessToastMessage("Giriş İşlemi Başarıyla Tamamlandı");
                     return RedirectToAction("Index", "Home");
                 }

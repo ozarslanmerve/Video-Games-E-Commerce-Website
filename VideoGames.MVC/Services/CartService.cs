@@ -71,10 +71,28 @@ namespace VideoGames.MVC.Services
             return result.Data;
         }
 
-        public Task<bool> CreateCartAsync(CartModel cartModel)
+        public async Task<bool> CreateCartAsync(CartModel cartModel)
         {
-            throw new NotImplementedException();
+            var client = GetHttpClient();
+
+           
+            var response = await client.PostAsJsonAsync("Carts/create", new
+            {
+                applicationUserId = cartModel.ApplicationUserId
+            });
+
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var result = JsonSerializer.Deserialize<ResponseModel<bool>>(jsonString, _jsonSerializerOptions);
+
+            if (result.Errors != null && result.Errors.Count > 0)
+            {
+                Console.WriteLine(string.Join(",", result.Errors));
+                return false;
+            }
+
+            return result.Data;
         }
+
 
         public async Task<CartModel> GetCartAsync(string applicationUserId)
         {

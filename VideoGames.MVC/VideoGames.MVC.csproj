@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ComplexTypes\" />
+    <Folder Include="NewFolder\" />
   </ItemGroup>
 
 </Project>

@@ -20,7 +20,7 @@ namespace VideoGames.MVC.Services
             return result;
         }
 
-        public async Task<ResponseModel<string>> RegisterAsnyc(RegisterModel registerModel)
+        public async Task<ResponseModel<string>> RegisterAsync(RegisterModel registerModel)
         {
             var client = GetHttpClient();
             var response = await client.PostAsJsonAsync("Authorization/register", registerModel);

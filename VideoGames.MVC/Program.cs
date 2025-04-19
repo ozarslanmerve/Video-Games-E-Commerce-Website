@@ -41,9 +41,9 @@ builder
     {
         options.Cookie.Name = "VideoGames.Auth";
         options.LoginPath = "/Auth/Login";
-        options.AccessDeniedPath = "/Auth/AccessDenied"; // yetkisiz sayfa
+        options.AccessDeniedPath = "/Auth/AccessDenied";
         options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
-        options.Cookie.HttpOnly = true; // sadece Http protokolü üzerine istek alsýn
+        options.Cookie.HttpOnly = true;
     });
 
 builder.Services.AddAuthorization();

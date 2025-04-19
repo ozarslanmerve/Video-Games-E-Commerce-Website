@@ -11,25 +11,105 @@ namespace VideoGames.MVC.Services
         {
         }
 
-        public async Task<VideoGameModel> AddAsync(VideoGameModel model)
+        public async Task<VideoGameModel> AddAsync(VideoGameCreateModel model)
         {
-            throw new NotImplementedException();
+            var client = GetHttpClient();
+
+            using var form = new MultipartFormDataContent();
+
+            
+            form.Add(new StringContent(model.Name), "Name");
+            form.Add(new StringContent(model.Description), "Description");
+            form.Add(new StringContent(model.Price.ToString()), "Price");
+
+           
+            if (model.CategoryIds != null)
+            {
+                foreach (var categoryId in model.CategoryIds)
+                {
+                    form.Add(new StringContent(categoryId.ToString()), "CategoryIds");
+                }
+            }
+
+           
+            if (model.CDKeys != null)
+            {
+                foreach (var key in model.CDKeys)
+                {
+                    form.Add(new StringContent(key.CDkey), "VideoGameCDkeys");
+                }
+            }
+
+            
+            if (model.Image != null && model.Image.Length > 0)
+            {
+                var imageContent = new StreamContent(model.Image.OpenReadStream());
+                imageContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(model.Image.ContentType);
+                form.Add(imageContent, "Image", model.Image.FileName);
+            }
+
+            
+            var response = await client.PostAsync("videoGames/add", form);
+            var jsonString = await response.Content.ReadAsStringAsync();
+
+            var result = JsonSerializer.Deserialize<ResponseModel<VideoGameModel>>(jsonString, _jsonSerializerOptions);
+
+            if (result.Errors != null && result.Errors.Count > 0)
+            {
+                throw new Exception("Ekleme sırasında hata oluştu: " + string.Join(", ", result.Errors));
+            }
+
+            return result.Data;
         }
 
-        public Task<int> CountAsync()
+
+        public async Task<int> CountAsync()
         {
-            throw new NotImplementedException();
+            var client = GetHttpClient();
+            var response = await client.GetAsync("videoGames/count");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Oyun sayısı alınamadı.");
+                return 0;
+            }
+
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var result = JsonSerializer.Deserialize<ResponseModel<int>>(jsonString, _jsonSerializerOptions);
+
+            return result?.Data ?? 0;
         }
 
-        public Task<int> CountByCategoryAsync(int categoryId)
+        public async Task<int> CountByCategoryAsync(int categoryId)
         {
-            throw new NotImplementedException();
+            var client = GetHttpClient();
+            var response = await client.GetAsync($"videoGames/countbycategory/{categoryId}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Kategoriye göre oyun sayısı alınamadı.");
+                return 0;
+            }
+
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var result = JsonSerializer.Deserialize<ResponseModel<int>>(jsonString, _jsonSerializerOptions);
+
+            return result?.Data ?? 0;
         }
 
-        public Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var client = GetHttpClient();
+            var response = await client.DeleteAsync($"videoGames/{id}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Silme işlemi başarısız: {content}");
+                throw new Exception("Oyun silinemedi.");
+            }
         }
+
 
         public async Task<IEnumerable<VideoGameModel>> GetAllAsync()
         {

@@ -26,7 +26,7 @@ namespace VideoGames.API.Controllers
             return CreateResponse(response);
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> CreateCart( CartCreateDTO cartCreateDTO)
         {
             var response = await _cartService.CreateCartAsync(cartCreateDTO);

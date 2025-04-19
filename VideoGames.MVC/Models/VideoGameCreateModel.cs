@@ -1,28 +1,31 @@
 ﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace VideoGames.MVC.Models
 {
-    public class VideoGameModel
+    public class VideoGameCreateModel
     {
-        [JsonProperty("id")]
-        public int Id { get; set; }
-
         [JsonProperty("name")]
+        [Required]
         public string Name { get; set; }
 
         [JsonProperty("description")]
         public string Description { get; set; }
 
         [JsonProperty("price")]
+        [Required]
         public decimal Price { get; set; }
 
         [JsonProperty("hasAgeLimit")]
+        [Required]
         public bool HasAgeLimit { get; set; }
 
-        [JsonProperty("imageUrl")]
-        public string ImageUrl { get; set; }
+        public IFormFile Image { get; set; }
 
-        [JsonProperty("categories")]
-        public IEnumerable<CategoryModel> Categories { get; set; }
+        [JsonProperty("categoryIds")]
+        public List<int> CategoryIds { get; set; } = new List<int>();
+
+        [JsonProperty("cdKeys")]
+        public List<VideoGameCDkeyModel> CDKeys { get; set; } 
     }
 }

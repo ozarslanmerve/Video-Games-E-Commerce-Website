@@ -213,9 +213,41 @@ namespace VideoGames.MVC.Services
             }
         }
 
-        public Task UpdateAsync(VideoGameModel model)
+        public async Task UpdateAsync(VideoGameUpdateModel model)
         {
-            throw new NotImplementedException();
+            var client = GetHttpClient();
+            var form = new MultipartFormDataContent();
+
+            form.Add(new StringContent(model.Id.ToString()), "Id");
+            form.Add(new StringContent(model.Name), "Name");
+            form.Add(new StringContent(model.Description), "Description");
+            form.Add(new StringContent(model.Price.ToString()), "Price");
+            form.Add(new StringContent(model.HasAgeLimit.ToString()), "HasAgeLimit");
+
+            // Yeni görsel varsa ekle
+            if (model.Image != null)
+            {
+                var imageContent = new StreamContent(model.Image.OpenReadStream());
+                form.Add(imageContent, "Image", model.Image.FileName);
+            }
+
+            // Kategorileri dizi halinde form verisine ekle
+            foreach (var categoryId in model.CategoryIds)
+            {
+                form.Add(new StringContent(categoryId.ToString()), "CategoryIds");
+            }
+
+            var response = await client.PutAsync("videogames", form);
+            var jsonString = await response.Content.ReadAsStringAsync();
+
+            var result = JsonSerializer.Deserialize<ResponseModel<VideoGameModel>>(jsonString, _jsonSerializerOptions);
+
+            if (result?.Errors != null && result.Errors.Count > 0)
+            {
+                throw new Exception(string.Join(", ", result.Errors));
+            }
         }
+
+
     }
 }

@@ -1,0 +1,89 @@
+﻿@model CartModel
+
+<div class="container mt-5 pt-5">
+    <h2>Sepetim</h2>
+    @if (Model.CartItems != null && Model.CartItems.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Oyun</th>
+                    <th>Fiyat</th>
+                    <th>Adet</th>
+                    <th>Toplam</th>
+                    <th>İşlem</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.CartItems)
+                {
+                    <tr>
+                        <td>@item.VideoGame.Name</td>
+                        <td>@($"{item.VideoGame.Price:C2}")</td>
+                        <td>
+                            <input type="number" class="form-control quantity-input"
+                                   data-cartitem-id="@item.Id"
+                                   value="@item.Quantity" min="1"
+                                   style="width:80px;" />
+                        </td>
+                        <td>@($"{item.VideoGame.Price * item.Quantity:C2}")</td>
+                        <td>
+                            <form asp-action="RemoveFromCart" asp-controller="Cart" method="post">
+                                <input type="hidden" name="cartItemId" value="@item.Id" />
+                                <button type="submit" class="btn btn-danger btn-sm">Sil</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="text-end">
+            <a asp-controller="Order" asp-action="Checkout" class="btn btn-primary">Siparişi Tamamla</a>
+        </div>
+
+        @section Scripts {
+            <script>
+                document.querySelectorAll(".quantity-input").forEach(input => {
+                    input.addEventListener("change", async () => {
+                        const id = input.getAttribute("data-cartitem-id");
+                        const quantity = input.value;
+
+                        try {
+                            const response = await fetch("http://localhost:5178/api/Carts/updatequantity", {
+                                method: "PUT",
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify({
+                                    cartItemId: parseInt(id),
+                                    quantity: parseInt(quantity)
+                                })
+                            });
+
+                            if (response.ok) {
+                                location.reload(); // Sayfayı güncelle
+                            } else {
+                                const result = await response.text();
+                                alert("Sunucu hatası: " + result);
+                            }
+                        } catch (error) {
+                            alert("İstek gönderilemedi: " + error);
+                        }
+                    });
+                });
+
+
+
+            </script>
+            }
+    
+
+    
+
+    }
+    else
+    {
+        <div class="alert alert-info">Sepetinizde oyun bulunmamaktadır.</div>
+    }
+</div>

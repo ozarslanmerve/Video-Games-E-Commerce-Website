@@ -20,7 +20,28 @@ namespace VideoGames.MVC.Controllers
 
             return View(videoGames);
         }
+        public async Task<IActionResult> GetAllByCategory(int id, string category)
+        {
 
-        
+            var videoGames = await _videoGameService.GetAllByCategoryAsync(id);
+            ViewData["CategoryName"] = category;
+            return View(videoGames);
+
+         
+        }
+
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var game = await _videoGameService.GetAsync(id);
+            if (game == null)
+            {
+                return NotFound();
+            }
+
+            return View(game);
+        }
+
+
     }
 }

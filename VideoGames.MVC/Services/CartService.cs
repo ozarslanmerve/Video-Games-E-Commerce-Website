@@ -15,7 +15,7 @@ namespace VideoGames.MVC.Services
             try
             {
                 var client = GetHttpClient();
-                var response = await client.PostAsJsonAsync("Carts/addtocard", cartItemModel);
+                var response = await client.PostAsJsonAsync("Carts/addtocart", cartItemModel);
                 if (!response.IsSuccessStatusCode)
                 {
                     throw new HttpRequestException("API hata verdi");
@@ -38,23 +38,25 @@ namespace VideoGames.MVC.Services
                 throw;
             }
         }
-        
 
         public async Task<string> ChangeQuantityAsync(int cartItemId, int quantity)
         {
             var client = GetHttpClient();
-            var response = await client.PutAsJsonAsync("carts", new CartItemModel
+            var response = await client.PutAsJsonAsync("carts/updatequantity", new
             {
-                Id = cartItemId, 
+                CartItemId = cartItemId,
                 Quantity = quantity
             });
+
             var jsonString = await response.Content.ReadAsStringAsync();
             var result = JsonSerializer.Deserialize<ResponseModel<string>>(jsonString, _jsonSerializerOptions);
-            if (result.Errors != null && result.Errors.Count > 0)
+
+            if (result?.Errors != null && result.Errors.Count > 0)
             {
                 Console.WriteLine(string.Join(",", result.Errors));
             }
-            return result.Data;
+
+            return result?.Data ?? "";
         }
 
 
@@ -123,7 +125,7 @@ namespace VideoGames.MVC.Services
             var client = GetHttpClient();
             var response = await client.DeleteAsync($"Carts/removefromcart/{cartItemId}");
             var jsonString = await response.Content.ReadAsStringAsync();
-            var result = JsonSerializer.Deserialize<ResponseModel<bool>>(jsonString, _jsonSerializerOptions);
+            var result = JsonSerializer.Deserialize<ResponseModel<object>>(jsonString, _jsonSerializerOptions);
 
             if (result.Errors != null && result.Errors.Count > 0)
             {

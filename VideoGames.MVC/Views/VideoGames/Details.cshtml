@@ -1,0 +1,35 @@
+﻿@model VideoGameModel
+<section class="videoGame-detail py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <img src="@Model.ImageUrl" class="img-fluid" alt="Ürün 1">
+            </div>
+            <div class="col-md-6">
+                <h2>@Model.Name</h2>
+                <p class="text-muted">@($"{Model.Price:C2}")</p>
+                <h5>Özellikler:</h5>
+                <p>
+                    @Model.Description
+                </p>
+                <div class="d-flex align-items-center">
+                    <input type="number" id="quantityInput" class="form-control quantity-input mr-2" value="1" min="1">
+                    <a id="cartLink" asp-controller="Cart" asp-action="AddToCart"
+                       asp-route-videoGameId="@Model.Id" asp-route-quantity="1"
+                       class="btn btn-primary btn-block">Sepete Ekle</a>
+                </div>
+
+                <script>
+                    const quantityInput = document.getElementById('quantityInput');
+                    const cartLink = document.getElementById('cartLink');
+
+                    quantityInput.addEventListener('input', function () {
+                        const baseUrl = cartLink.href.split('&quantity=')[0];
+                        cartLink.href = baseUrl + '&quantity=' + this.value;
+                    });
+                </script>
+
+            </div>
+        </div>
+    </div>
+</section> 

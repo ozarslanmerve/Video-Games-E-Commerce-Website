@@ -32,6 +32,11 @@ namespace VideoGames.MVC.Controllers
             return View();
         }
 
+        public async Task<IActionResult> Register()
+        {
+            return View();
+        }
+
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel loginModel)
         {
@@ -89,12 +94,12 @@ namespace VideoGames.MVC.Controllers
                             int pendingVideoGameId = TempData["PendingVideoGameId"] as int? ?? 0;
                             int pendingQuantity = TempData["PendingQuantity"] as int? ?? 0;
 
-                            
+
                             var cart = await _cartService.GetCartAsync(userId);
 
                             if (cart != null)
                             {
-                               
+
                                 await _cartService.AddToCartAsync(new CartItemModel
                                 {
                                     CartId = cart.Id,
@@ -122,6 +127,67 @@ namespace VideoGames.MVC.Controllers
             return View();
         }
 
+
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterModel registerModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(registerModel);
+            }
+
+            try
+            {
+                var response = await _authService.RegisterAsync(registerModel);
+
+                if (response.Errors == null || response.Errors.Count == 0)
+                {
+                    // Kullanıcı başarılı şekilde kaydolduysa:
+                    // Kullanıcının email bilgisine göre tekrar login yaparak token al
+                    var loginResponse = await _authService.LoginAsync(new LoginModel
+                    {
+                        Email = registerModel.Email,
+                        Password = registerModel.Password
+                    });
+
+                    if (loginResponse?.Data?.AccessToken != null)
+                    {
+                        var handler = new JwtSecurityTokenHandler();
+                        var token = handler.ReadJwtToken(loginResponse.Data.AccessToken);
+
+                        var userId = token.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+                        if (!string.IsNullOrEmpty(userId))
+                        {
+                            // Yeni kayıt olan kullanıcı için sepet oluştur
+                            await _cartService.CreateCartAsync(new CartModel
+                            {
+                                ApplicationUserId = userId
+                            });
+                        }
+                    }
+
+                    _toaster.AddSuccessToastMessage("Kayıt işlemi başarıyla tamamlandı. Giriş yapabilirsiniz.");
+                    return RedirectToAction("Login");
+                }
+                else
+                {
+                    foreach (var error in response.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error);
+                    }
+                    return View(registerModel);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Kayıt Hatası: {ex.Message}");
+                ModelState.AddModelError(string.Empty, "Kayıt sırasında bir hata oluştu. Lütfen tekrar deneyiniz.");
+                return View(registerModel);
+            }
+        }
+
+
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -134,6 +200,6 @@ namespace VideoGames.MVC.Controllers
             return View();
         }
 
-       
+
     }
 }

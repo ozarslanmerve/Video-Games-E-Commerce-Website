@@ -18,7 +18,7 @@ namespace VideoGames.API.Controllers
             _cartService = cartService;
         }
 
-        [Authorize(Roles = "AdminUser")]
+       
         [HttpGet("{applicationUserId}")]
         public async Task<IActionResult> GetCartByUser(string applicationUserId)
         {
@@ -55,7 +55,7 @@ namespace VideoGames.API.Controllers
             return CreateResponse(response);
         }
 
-        [HttpPut]
+        [HttpPut("updatequantity")]
         public async Task<IActionResult> ChangeQuantity([FromBody] CartItemChangeQuantityDTO dto)
         {
             var response = await _cartService.ChangeVideoGameQuantityAsync(dto);

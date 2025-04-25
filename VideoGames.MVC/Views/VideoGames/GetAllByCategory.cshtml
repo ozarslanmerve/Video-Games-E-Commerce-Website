@@ -1,0 +1,44 @@
+﻿@model IEnumerable<VideoGameModel>
+@{
+    ViewData["Title"] = "GetAllByCategory";
+}
+
+<section class="popular-products py-3">
+    <div class="container">
+        <h2 class="text-center mb-4">@ViewData["CategoryName"] Kategorisindeki Oyunlar</h2>
+        <div class="row">
+            @if (Model.Any())
+            {
+                @foreach (var game in Model)
+                {
+                    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12 mb-4">
+                        <div class="card product-card">
+                            <div onclick="window.location.href='@Url.Action("Details","VideoGames",new {id=game.Id})'"
+                                 style="cursor: pointer;">
+                                <img src="@Url.Content($"~/{game.ImageUrl}")" class="card-img-top" alt="@game.Name" />
+
+                                <div class="card-body">
+                                    <h5 class="card-title">@game.Name</h5>
+                                    <p class="card-text">@($"{game.Price:C2}")</p>
+                                </div>
+                            </div>
+                            <div class="card-footer text-center">
+                                <a asp-area="" asp-controller="Cart" asp-action="AddToCart"
+                                   asp-route-videoGameId="@game.Id" asp-route-quantity="1"
+                                   class="btn btn-primary btn-block">Sepete Ekle</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-12">
+                    <div class="alert alert-warning" role="alert">
+                        Bu kategoride oyun bulunmamaktadır.
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

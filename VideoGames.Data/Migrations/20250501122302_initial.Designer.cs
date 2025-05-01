@@ -12,7 +12,7 @@ using VideoGames.Data.Concrete.Contexts;
 namespace VideoGames.Data.Migrations
 {
     [DbContext(typeof(VideoGamesDbContext))]
-    [Migration("20250411140016_initial")]
+    [Migration("20250501122302_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -283,8 +283,8 @@ namespace VideoGames.Data.Migrations
                             AccessFailedCount = 0,
                             Address = "",
                             City = "",
-                            ConcurrencyStamp = "aead8720-b359-409d-b51c-36fb5626473d",
-                            DateOfBirth = new DateTime(2025, 4, 11, 17, 0, 16, 332, DateTimeKind.Local).AddTicks(9706),
+                            ConcurrencyStamp = "e0a388c0-324b-4ba4-af32-f792ac386a81",
+                            DateOfBirth = new DateTime(2025, 5, 1, 15, 23, 2, 48, DateTimeKind.Local).AddTicks(9949),
                             Email = "adminuser@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -293,10 +293,10 @@ namespace VideoGames.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMINUSER@GMAIL.COM",
                             NormalizedUserName = "ADMINUSER@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEKVF+gDIfOIKoLLs9MGW8HPOG8sZ4D/jsb8ftLN8C4Iix0oXiijOnIqOsgkLzD02bw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEB+KJXSkDk8Lt6gWxNoZ3gPJ34d+MHORXoItixdsMfVcdUE+CrcEhK3Jf4QdIYsaUQ==",
                             PhoneNumber = "",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "5f4c0365-2759-4e7c-83e1-41baa32819f1",
+                            SecurityStamp = "539c35c9-440d-44a9-8d98-b69f22c556a4",
                             TwoFactorEnabled = false,
                             UserName = "adminuser@gmail.com"
                         },
@@ -306,8 +306,8 @@ namespace VideoGames.Data.Migrations
                             AccessFailedCount = 0,
                             Address = "",
                             City = "",
-                            ConcurrencyStamp = "752a149b-d291-4234-8202-a55f340f9498",
-                            DateOfBirth = new DateTime(2025, 4, 11, 17, 0, 16, 382, DateTimeKind.Local).AddTicks(1818),
+                            ConcurrencyStamp = "d60cc93a-b1a1-4144-80c2-f02b771df5cf",
+                            DateOfBirth = new DateTime(2025, 5, 1, 15, 23, 2, 119, DateTimeKind.Local).AddTicks(3324),
                             Email = "normaluser@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Normal",
@@ -316,10 +316,10 @@ namespace VideoGames.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "NORMALUSER@GMAIL.COM",
                             NormalizedUserName = "NORMALUSER@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEKf6ePdF2k1ykIKRQWDDCIByWUsLLSUOHx9tYVwXvSZVgn6YboqEt63XOtZn+zVT8A==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEM3SM9N+tr00F93hCt5QGT7jjTlLJt3MmsiSE4dSPCIij3pQj8QDPi/Dthg7daLy1w==",
                             PhoneNumber = "",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "fad17716-868a-4c43-ab15-a8ceab1b2333",
+                            SecurityStamp = "5e9405bd-9317-4f5c-ae71-9fd20fc3fc09",
                             TwoFactorEnabled = false,
                             UserName = "normaluser@gmail.com"
                         });
@@ -427,6 +427,9 @@ namespace VideoGames.Data.Migrations
                     b.Property<int>("OrderStatus")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(18,2)");
+
                     b.HasKey("ID");
 
                     b.HasIndex("ApplicationUserId");
@@ -451,19 +454,12 @@ namespace VideoGames.Data.Migrations
                     b.Property<decimal>("UnitPrice")
                         .HasColumnType("decimal(10,2)");
 
-                    b.Property<int?>("VideoGameCDkeyId")
-                        .HasColumnType("int");
-
                     b.Property<int>("VideoGameId")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
 
                     b.HasIndex("OrderId");
-
-                    b.HasIndex("VideoGameCDkeyId")
-                        .IsUnique()
-                        .HasFilter("[VideoGameCDkeyId] IS NOT NULL");
 
                     b.HasIndex("VideoGameId");
 
@@ -488,7 +484,8 @@ namespace VideoGames.Data.Migrations
 
                     b.HasIndex("OrderItemId");
 
-                    b.HasIndex("VideoGameCDkeyId");
+                    b.HasIndex("VideoGameCDkeyId")
+                        .IsUnique();
 
                     b.ToTable("OrderItemCDKeys");
                 });
@@ -552,6 +549,9 @@ namespace VideoGames.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("CDkey")
+                        .IsUnique();
 
                     b.HasIndex("VideoGameId");
 
@@ -673,11 +673,6 @@ namespace VideoGames.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("VideoGames.Entity.Concrete.VideoGameCDkey", "VideoGameCDkey")
-                        .WithOne()
-                        .HasForeignKey("VideoGames.Entity.Concrete.OrderItem", "VideoGameCDkeyId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.HasOne("VideoGames.Entity.Concrete.VideoGame", "VideoGame")
                         .WithMany()
                         .HasForeignKey("VideoGameId")
@@ -687,8 +682,6 @@ namespace VideoGames.Data.Migrations
                     b.Navigation("Order");
 
                     b.Navigation("VideoGame");
-
-                    b.Navigation("VideoGameCDkey");
                 });
 
             modelBuilder.Entity("VideoGames.Entity.Concrete.OrderItemCDKey", b =>

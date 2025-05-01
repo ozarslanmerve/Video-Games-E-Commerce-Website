@@ -225,6 +225,7 @@ namespace VideoGames.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TotalAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     OrderStatus = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -319,7 +320,6 @@ namespace VideoGames.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     OrderId = table.Column<int>(type: "int", nullable: false),
                     VideoGameId = table.Column<int>(type: "int", nullable: false),
-                    VideoGameCDkeyId = table.Column<int>(type: "int", nullable: true),
                     UnitPrice = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false)
                 },
@@ -332,12 +332,6 @@ namespace VideoGames.Data.Migrations
                         principalTable: "Orders",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_OrderItems_VideoGameCDkeys_VideoGameCDkeyId",
-                        column: x => x.VideoGameCDkeyId,
-                        principalTable: "VideoGameCDkeys",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_OrderItems_VideoGames_VideoGameId",
                         column: x => x.VideoGameId,
@@ -385,8 +379,8 @@ namespace VideoGames.Data.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "Address", "City", "ConcurrencyStamp", "DateOfBirth", "Email", "EmailConfirmed", "FirstName", "Gender", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "14a0183f-1e96-4930-a83d-6ef5f22d8c09", 0, "", "", "752a149b-d291-4234-8202-a55f340f9498", new DateTime(2025, 4, 11, 17, 0, 16, 382, DateTimeKind.Local).AddTicks(1818), "normaluser@gmail.com", true, "Normal", 1, "User", false, null, "NORMALUSER@GMAIL.COM", "NORMALUSER@GMAIL.COM", "AQAAAAIAAYagAAAAEKf6ePdF2k1ykIKRQWDDCIByWUsLLSUOHx9tYVwXvSZVgn6YboqEt63XOtZn+zVT8A==", "", false, "fad17716-868a-4c43-ab15-a8ceab1b2333", false, "normaluser@gmail.com" },
-                    { "c0b7fef7-df2b-4857-9b3d-bc8967ad19ac", 0, "", "", "aead8720-b359-409d-b51c-36fb5626473d", new DateTime(2025, 4, 11, 17, 0, 16, 332, DateTimeKind.Local).AddTicks(9706), "adminuser@gmail.com", true, "Admin", 1, "User", false, null, "ADMINUSER@GMAIL.COM", "ADMINUSER@GMAIL.COM", "AQAAAAIAAYagAAAAEKVF+gDIfOIKoLLs9MGW8HPOG8sZ4D/jsb8ftLN8C4Iix0oXiijOnIqOsgkLzD02bw==", "", false, "5f4c0365-2759-4e7c-83e1-41baa32819f1", false, "adminuser@gmail.com" }
+                    { "14a0183f-1e96-4930-a83d-6ef5f22d8c09", 0, "", "", "d60cc93a-b1a1-4144-80c2-f02b771df5cf", new DateTime(2025, 5, 1, 15, 23, 2, 119, DateTimeKind.Local).AddTicks(3324), "normaluser@gmail.com", true, "Normal", 1, "User", false, null, "NORMALUSER@GMAIL.COM", "NORMALUSER@GMAIL.COM", "AQAAAAIAAYagAAAAEM3SM9N+tr00F93hCt5QGT7jjTlLJt3MmsiSE4dSPCIij3pQj8QDPi/Dthg7daLy1w==", "", false, "5e9405bd-9317-4f5c-ae71-9fd20fc3fc09", false, "normaluser@gmail.com" },
+                    { "c0b7fef7-df2b-4857-9b3d-bc8967ad19ac", 0, "", "", "e0a388c0-324b-4ba4-af32-f792ac386a81", new DateTime(2025, 5, 1, 15, 23, 2, 48, DateTimeKind.Local).AddTicks(9949), "adminuser@gmail.com", true, "Admin", 1, "User", false, null, "ADMINUSER@GMAIL.COM", "ADMINUSER@GMAIL.COM", "AQAAAAIAAYagAAAAEB+KJXSkDk8Lt6gWxNoZ3gPJ34d+MHORXoItixdsMfVcdUE+CrcEhK3Jf4QdIYsaUQ==", "", false, "539c35c9-440d-44a9-8d98-b69f22c556a4", false, "adminuser@gmail.com" }
                 });
 
             migrationBuilder.InsertData(
@@ -469,19 +463,13 @@ namespace VideoGames.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_OrderItemCDKeys_VideoGameCDkeyId",
                 table: "OrderItemCDKeys",
-                column: "VideoGameCDkeyId");
+                column: "VideoGameCDkeyId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderItems_OrderId",
                 table: "OrderItems",
                 column: "OrderId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OrderItems_VideoGameCDkeyId",
-                table: "OrderItems",
-                column: "VideoGameCDkeyId",
-                unique: true,
-                filter: "[VideoGameCDkeyId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderItems_VideoGameId",
@@ -497,6 +485,12 @@ namespace VideoGames.Data.Migrations
                 name: "IX_VideoGameCategory_CategoryId",
                 table: "VideoGameCategory",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VideoGameCDkeys_CDkey",
+                table: "VideoGameCDkeys",
+                column: "CDkey",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_VideoGameCDkeys_VideoGameId",
@@ -541,19 +535,19 @@ namespace VideoGames.Data.Migrations
                 name: "OrderItems");
 
             migrationBuilder.DropTable(
+                name: "VideoGameCDkeys");
+
+            migrationBuilder.DropTable(
                 name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "Orders");
 
             migrationBuilder.DropTable(
-                name: "VideoGameCDkeys");
+                name: "VideoGames");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "VideoGames");
         }
     }
 }

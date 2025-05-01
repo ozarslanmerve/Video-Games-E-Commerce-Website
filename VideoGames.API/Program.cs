@@ -5,8 +5,6 @@ using VideoGames.Data.Concrete;
 using VideoGames.Data.Concrete.Contexts;
 using VideoGames.Business.Abstract;
 using VideoGames.Business.Concrete;
-using VideoGames.Business.FileManagement.Abstract;
-using VideoGames.Business.FileManagement.Concrete;
 using VideoGames.Business;
 using VideoGames.Entity.Concrete;
 using Microsoft.AspNetCore.Identity;
@@ -14,6 +12,8 @@ using VideoGames.Business.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using VideoGames.Business.Helpers.FileManagement.Abstract;
+using VideoGames.Business.Helpers.FileManagement.Concrete;
 
 var builder = WebApplication.CreateBuilder(args);
 

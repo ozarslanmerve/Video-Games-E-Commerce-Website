@@ -60,24 +60,26 @@ namespace VideoGames.MVC.Services
         }
 
 
-        public async Task<string> ClearCartAsync(string applicationUserId)
+        public async Task<bool> ClearCartAsync(string applicationUserId)
         {
             var client = GetHttpClient();
             var response = await client.GetAsync($"Carts/clear/{applicationUserId}");
-            var jsonString = await response.Content.ReadAsStringAsync();
-            var result = JsonSerializer.Deserialize<ResponseModel<string>>(jsonString, _jsonSerializerOptions);
-            if (result.Errors != null && result.Errors.Count > 0)
+
+            if (response.IsSuccessStatusCode)
             {
-                Console.WriteLine(string.Join(",", result.Errors));
+                return true; // Temizleme başarılı
             }
-            return result.Data;
+
+            var error = await response.Content.ReadAsStringAsync();
+            Console.WriteLine("Sepet temizleme hatası: " + error);
+            return false;
         }
 
         public async Task<bool> CreateCartAsync(CartModel cartModel)
         {
             var client = GetHttpClient();
 
-           
+
             var response = await client.PostAsJsonAsync("Carts/create", new
             {
                 applicationUserId = cartModel.ApplicationUserId

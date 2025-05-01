@@ -49,7 +49,7 @@ namespace VideoGames.API.Controllers
             return CreateResponse(response);
         }
 
-        [HttpGet("getbyuserId/({applicationUserId})")]
+        [HttpGet("getbyuserId/{applicationUserId}")]
         public async Task<IActionResult> GetByUser(string applicationUserId)
         {
             var response  = await _orderService.GetOrdersAsync(applicationUserId);    

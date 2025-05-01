@@ -19,7 +19,7 @@ namespace VideoGames.API.Controllers
         }
 
 
-        [Authorize(Roles = "AdminUser")]
+        //[Authorize(Roles = "AdminUser")]
         [HttpPost("add")]
         public async Task<IActionResult> CreateVideoGame(VideoGameCreateDTO videoGameCreateDTO)
         {

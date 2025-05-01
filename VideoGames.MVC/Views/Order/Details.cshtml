@@ -1,0 +1,55 @@
+﻿@model VideoGames.MVC.Models.OrderModel
+
+@{
+    ViewData["Title"] = "Sipariş Detayı";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Sipariş Detayı</h2>
+
+    <div class="card p-3 mb-4">
+        <h5>Sipariş No: @Model.Id</h5>
+        <p>Durum: <span class="badge bg-info">@Model.OrderStatus</span></p>
+        <p>Tarih: @Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</p>
+        <p>Toplam Tutar: <strong>@Model.TotalAmount.ToString("C2")</strong></p>
+    </div>
+
+    <h4>Oyunlar</h4>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Oyun</th>
+                <th>Adet</th>
+                <th>Birim Fiyat</th>
+                <th>CD Key(ler)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderItems)
+            {
+                <tr>
+                    <td>@item.VideoGameName</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.UnitPrice.ToString("C2")</td>
+                    <td>
+                        @if (item.CDKeys != null && item.CDKeys.Any())
+                        {
+                            <ul>
+                                @foreach (var key in item.CDKeys)
+                                {
+                                    <li>@key</li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <span class="text-muted">Atanmamış</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a asp-controller="Order" asp-action="Index" class="btn btn-secondary">Siparişlerim</a>
+</div>

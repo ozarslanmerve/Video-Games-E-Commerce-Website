@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VideoGames.Business.FileManagement.Abstract
+namespace VideoGames.Business.Helpers.FileManagement.Abstract
 {
     public interface IFileService
     {

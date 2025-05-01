@@ -32,7 +32,7 @@ public class OrderService : IOrderService
         foreach (var item in dto.OrderItems)
         {
             var game = await _unitOfWork.GetRepository<VideoGame>()
-            .GetByIdAsync(g => g.ID == item.VideoGameId, query => query.Include(g => g.CDkeys));
+                .GetByIdAsync(g => g.ID == item.VideoGameId, query => query.Include(g => g.CDkeys));
 
             if (game == null)
                 return ResponseDTO<OrderDTO>.Fail($"{item.VideoGameId} ID'li oyun bulunamadı", StatusCodes.Status404NotFound);
@@ -43,16 +43,28 @@ public class OrderService : IOrderService
                 return ResponseDTO<OrderDTO>.Fail($"{game.Name} için yeterli CD Key yok", StatusCodes.Status400BadRequest);
         }
 
-        // 2. Siparişi oluştur
+        // 2. Siparişi oluştur (mapper ile dönüştür)
         var order = _mapper.Map<Order>(dto);
-        await _orderRepository.AddAsync(order);
-        await _unitOfWork.SaveChangesAsync(); // ID'ler oluşturulsun
 
-        // 3. Daha önce atanmış CD Key ID'lerini al
+        // 3. Fiyatları belirle ve toplam tutarı hesapla
+        decimal totalAmount = 0;
+        foreach (var orderItem in order.OrderItems)
+        {
+            var game = await _unitOfWork.GetRepository<VideoGame>().GetByIdAsync(orderItem.VideoGameId);
+            orderItem.UnitPrice = game.Price;
+            totalAmount += orderItem.Quantity * orderItem.UnitPrice;
+        }
+        order.TotalAmount = totalAmount;
+
+        // 4. Order kaydı (ID'ler oluşması için)
+        await _orderRepository.AddAsync(order);
+        await _unitOfWork.SaveChangesAsync(); // ❗️OrderItem.ID’ler burada oluşur
+
+        // 5. Mevcut atanmış CD Key ID’lerini al
         var allOrderItemCdKeys = await _orderItemCdKeyRepository.GetAllAsync();
         var assignedKeyIds = new HashSet<int>(allOrderItemCdKeys.Select(c => c.VideoGameCDkeyId));
 
-        // 4. Her OrderItem için CD Key ata
+        // 6. CD Key ataması yap
         foreach (var orderItem in order.OrderItems)
         {
             var availableKeys = await _cdKeyRepository.GetAllAsync(
@@ -81,13 +93,13 @@ public class OrderService : IOrderService
             }
         }
 
-        // 5. CD Key güncellemelerini ve eşleştirmeleri kaydet
+        // 7. CD Key güncellemelerini ve eşleşmeleri kaydet
         await _unitOfWork.SaveChangesAsync();
 
-        // 6. Sepeti temizle
+        // 8. Sepeti temizle
         await _cartService.ClearCartAsync(order.ApplicationUserId);
 
-        // 7. DTO'ya dönüştürüp başarılı sonucu döndür
+        // 9. DTO’ya dönüştür ve dön
         var resultDto = _mapper.Map<OrderDTO>(order);
         return ResponseDTO<OrderDTO>.Success(resultDto, StatusCodes.Status201Created);
     }
@@ -121,7 +133,7 @@ public class OrderService : IOrderService
         foreach (var itemDto in orderDto.OrderItems)
         {
             var keys = await _orderItemCdKeyRepository.GetAllAsync(
-                k => k.ID == itemDto.Id,
+                k => k.OrderItemId == itemDto.Id,
                 null,
                 q => q.Include(x => x.VideoGameCDkey));
 

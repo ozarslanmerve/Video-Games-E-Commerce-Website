@@ -14,12 +14,11 @@ namespace VideoGames.Entity.Concrete
         public int VideoGameId { get; set; }
         public VideoGame VideoGame { get; set; }
 
-        public int? VideoGameCDkeyId { get; set; } // Foreign Key
-        public VideoGameCDkey VideoGameCDkey { get; set; } // Navigasyon
+    
         public decimal UnitPrice { get; set; }
         public int Quantity { get; set; }
 
-        public ICollection<OrderItemCDKey> OrderItemCDKeys { get; set; }
+        public ICollection<OrderItemCDKey> OrderItemCDKeys { get; set; } = new List<OrderItemCDKey>();
 
 
 

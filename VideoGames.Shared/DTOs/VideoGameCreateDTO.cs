@@ -14,6 +14,7 @@ namespace VideoGames.Shared.DTOs
         public decimal Price { get; set; }
         public bool HasAgeLimit { get; set; }
         public int[] CategoryIds { get; set; } = [];
+        public int CDKeyCount { get; set; }
         public List<string> VideoGameCDkeys { get; set; } = new();
         public IFormFile Image { get; set; }
     }

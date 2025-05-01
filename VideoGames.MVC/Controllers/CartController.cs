@@ -97,7 +97,7 @@ namespace VideoGames.MVC.Controllers
         public async Task<IActionResult> ClearCart()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            await _cartService.ClearCartAsync(userId);
+            var response = await _cartService.ClearCartAsync(userId);
             return RedirectToAction("Index");
         }
     }

@@ -1,0 +1,38 @@
+﻿@model decimal
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<section class="checkout py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Ödeme</h2>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="alert alert-info text-center" role="alert">
+                    Ödenecek Toplam Tutar: <strong>@($"{Model:C2}")</strong>
+                </div>
+                <form asp-area="" asp-controller="Order" asp-action="Checkout" method="post">
+                    <div class="form-group">
+                        <label for="cardName">Kart Üzerindeki İsim</label>
+                        <input type="text" class="form-control" id="cardName" placeholder="Kart Üzerindeki İsim">
+                    </div>
+                    <div class="form-group">
+                        <label for="cardNumber">Kart Numarası</label>
+                        <input type="text" class="form-control" id="cardNumber" placeholder="Kart Numarası">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="expiryDate">Son Kullanma Tarihi</label>
+                            <input type="text" class="form-control" id="expiryDate" placeholder="MM/YY">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="cvv">CVV</label>
+                            <input type="text" class="form-control" id="cvv" placeholder="CVV">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Öde</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section> 

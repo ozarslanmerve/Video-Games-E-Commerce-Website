@@ -7,7 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VideoGames.Business.Abstract;
-using VideoGames.Business.FileManagement.Abstract;
+using VideoGames.Business.Helpers;
+using VideoGames.Business.Helpers.FileManagement.Abstract;
 using VideoGames.Data.Abstract;
 using VideoGames.Entity.Concrete;
 using VideoGames.Shared.DTOs;
@@ -52,21 +53,50 @@ namespace VideoGames.Business.Concrete
                 return ResponseDTO<VideoGameAdminDTO>.Fail("Bir Sorun Oluştu", StatusCodes.Status500InternalServerError);
             }
 
+            // Kategorileri ekle
             videoGame.VideoGameCategories = videoGameCreateDTO.CategoryIds.Select(cId => new VideoGameCategory
             {
                 VideoGameId = videoGame.ID,
                 CategoryId = cId
             }).ToList();
 
-            videoGame.CDkeys = videoGameCreateDTO.VideoGameCDkeys.Select(cdKey => new VideoGameCDkey
-            {
-                VideoGameId = videoGame.ID,
-                CDkey = cdKey,
-                IsUsed = false
-            }).ToList();
+            // CD Key listesi hazırla
+            videoGame.CDkeys = new List<VideoGameCDkey>();
 
+            // Elle girilen CD Key'leri ekle
+            foreach (var cdKey in videoGameCreateDTO.VideoGameCDkeys)
+            {
+                videoGame.CDkeys.Add(new VideoGameCDkey
+                {
+                    VideoGameId = videoGame.ID,
+                    CDkey = cdKey,
+                    IsUsed = false
+                });
+            }
+
+            // Otomatik CD Key üret
+            for (int i = 0; i < videoGameCreateDTO.CDKeyCount; i++)
+            {
+                string newKey = CDKeyGenerator.Generate();
+
+                // Benzersiz olsun diye kontrol et
+                while (await _unitOfWork.GetRepository<VideoGameCDkey>().ExistsAsync(k => k.CDkey == newKey))
+                {
+                    newKey = CDKeyGenerator.Generate();
+                }
+
+                videoGame.CDkeys.Add(new VideoGameCDkey
+                {
+                    VideoGameId = videoGame.ID,
+                    CDkey = newKey,
+                    IsUsed = false
+                });
+            }
+
+            // Güncelle ve kaydet
             _videoGameRepository.Update(videoGame);
             result = await _unitOfWork.SaveChangesAsync();
+
             if (result <= 0)
             {
                 return ResponseDTO<VideoGameAdminDTO>.Fail("Bir Sorun Oluştu", StatusCodes.Status500InternalServerError);
@@ -75,6 +105,7 @@ namespace VideoGames.Business.Concrete
             var videoGameAdminDTO = _mapper.Map<VideoGameAdminDTO>(videoGame);
             return ResponseDTO<VideoGameAdminDTO>.Success(videoGameAdminDTO, StatusCodes.Status201Created);
         }
+
 
         public async Task<ResponseDTO<IEnumerable<VideoGameAdminDTO>>> GetAllDetailedAsync()
         {

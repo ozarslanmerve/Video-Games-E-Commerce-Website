@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using VideoGames.Business.FileManagement.Abstract;
+using VideoGames.Business.Helpers.FileManagement.Abstract;
 
-namespace VideoGames.Business.FileManagement.Concrete
+namespace VideoGames.Business.Helpers.FileManagement.Concrete
 {
     public class FileService : IFileService
     {
@@ -16,9 +16,8 @@ namespace VideoGames.Business.FileManagement.Concrete
             _env = env;
         }
 
-        /// <summary>
-        /// Yeni resmi kaydeder, eğer eski dosya yolu varsa onu siler.
-        /// </summary>
+        //Yeni resmi kaydeder, eğer eski dosya yolu varsa onu siler.
+     
         public async Task<string> SaveImageAsync(IFormFile imageFile, string existingFilePath = null)
         {
             if (imageFile == null || imageFile.Length == 0)
@@ -49,9 +48,9 @@ namespace VideoGames.Business.FileManagement.Concrete
             return Path.Combine("images", fileName).Replace("\\", "/");
         }
 
-        /// <summary>
-        /// Belirtilen dosya yolundaki resmi siler.
-        /// </summary>
+       
+        // Belirtilen dosya yolundaki resmi siler.
+     
         public void DeleteImage(string imagePath)
         {
             if (string.IsNullOrEmpty(imagePath))

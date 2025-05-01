@@ -74,22 +74,26 @@ namespace VideoGames.Data.Concrete.Contexts
                                      .IsRequired()
                                      .HasMaxLength(100); // Key karakter sınırı (örnek)
 
+                entity.HasIndex(k => k.CDkey)
+                      .IsUnique(); // CD key'in benzersiz olmasını sağlar    
+
             });
+            builder.Entity<Order>(entity =>
+            { 
+                entity.HasKey(k => k.ID); 
+                entity.Property(o => o.TotalAmount)
+                      .HasColumnType("decimal(18,2)"); // Decimal türünde fiyat bilgisi için    
+
+            });
+
 
             builder.Entity<OrderItem>(entity =>
             {
-
-                entity.HasOne(oi => oi.VideoGameCDkey)
-                      .WithOne()
-                      .HasForeignKey<OrderItem>(oi => oi.VideoGameCDkeyId)
-                      .OnDelete(DeleteBehavior.SetNull);
-
                 entity.HasOne(oi => oi.VideoGame)
                       .WithMany()
                       .HasForeignKey(oi => oi.VideoGameId)
                       .OnDelete(DeleteBehavior.NoAction);
 
- 
                 entity.HasOne(oi => oi.Order)
                       .WithMany(o => o.OrderItems)
                       .HasForeignKey(oi => oi.OrderId)
@@ -103,17 +107,17 @@ namespace VideoGames.Data.Concrete.Contexts
             {
                 entity.HasKey(x => x.ID);
 
-                
                 entity.HasOne(x => x.OrderItem)
-                      .WithMany((x => x.OrderItemCDKeys)) 
-                      .HasForeignKey(x => x.OrderItemId) 
-                      .OnDelete(DeleteBehavior.Cascade); 
+                      .WithMany(x => x.OrderItemCDKeys)
+                      .HasForeignKey(x => x.OrderItemId)
+                      .OnDelete(DeleteBehavior.Cascade);
 
-              
                 entity.HasOne(x => x.VideoGameCDkey)
                       .WithMany()
                       .HasForeignKey(x => x.VideoGameCDkeyId)
-                      .OnDelete(DeleteBehavior.Restrict); 
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasIndex(x => x.VideoGameCDkeyId).IsUnique(); // her CD Key yalnızca bir kere kullanılır
             });
 
             // Default roles

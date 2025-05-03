@@ -18,5 +18,8 @@ namespace VideoGames.MVC.Areas.Admin.Controllers
         {
             return View();
         }
+
+   
+
     }
 }

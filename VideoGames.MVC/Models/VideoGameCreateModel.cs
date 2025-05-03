@@ -25,6 +25,9 @@ namespace VideoGames.MVC.Models
         [JsonProperty("categoryIds")]
         public List<int> CategoryIds { get; set; } = new List<int>();
 
+        [JsonProperty("cdKeyCount")]
+        public int CDKeyCount { get; set; }
+
         [JsonProperty("cdKeys")]
         public List<VideoGameCDkeyModel> CDKeys { get; set; } 
     }

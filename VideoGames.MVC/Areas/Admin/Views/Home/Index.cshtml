@@ -2,5 +2,29 @@
     ViewData["Title"] = "Admin Paneli";
 }
 
-<h1>Admin Paneli</h1>
-<p>Hoş geldiniz!
+<h2 class="text-center my-4">🎮 Admin Paneli</h2>
+
+<div class="container">
+    <div class="row g-4">
+        <div class="col-md-3">
+            <a class="btn btn-outline-primary w-100" asp-area="Admin" asp-controller="VideoGame" asp-action="Create">
+                Oyun ve CD Key İşlemleri
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a class="btn btn-outline-secondary w-100" asp-area="Admin" asp-controller="Category" asp-action="Index">
+                Kategori İşlemleri
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a class="btn btn-outline-warning w-100" asp-area="Admin" asp-controller="Cart" asp-action="Index">
+                Sepet İşlemleri
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a class="btn btn-outline-success w-100" asp-area="Admin" asp-controller="Order" asp-action="Index">
+                Sipariş İşlemleri
+            </a>
+        </div>
+    </div>
+</div>

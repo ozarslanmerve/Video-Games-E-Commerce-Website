@@ -1,0 +1,71 @@
+﻿@using VideoGames.MVC.Models
+@model VideoGameCreateModel
+
+@{
+    ViewData["Title"] = "Yeni Oyun Ekle";
+}
+
+<h2>Yeni Oyun Ekle</h2>
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div>
+        <label>Ad</label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+    <div>
+        <label>Açıklama</label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+    <div>
+        <label>Fiyat</label>
+        <input asp-for="Price" type="number" step="0.01" class="form-control" />
+    </div>
+    <div>
+        <label>Yaş Sınırı</label>
+        <input asp-for="HasAgeLimit" type="checkbox" />
+    </div>
+    <div>
+        <label>Kategoriler (ID olarak gir)</label>
+        <input type="text" id="categoryIds" name="CategoryIds" placeholder="1,2,3" class="form-control" />
+    </div>
+    <div>
+        <label>CD Key Sayısı</label>
+        <input asp-for="CDKeyCount" id="cdKeyCount" type="number" min="1" class="form-control" />
+    </div>
+    <div>
+        <button type="button" onclick="generateCDKeys()">CD Key Üret</button>
+    </div>
+    <div id="cdKeyContainer"></div>
+
+    <div>
+        <label>Görsel</label>
+        <input asp-for="Image" type="file" class="form-control" />
+    </div>
+
+    <button type="submit">Kaydet</button>
+</form>
+
+@section Scripts {
+    <script>
+        function generateCDKeys() {
+            const count = parseInt(document.getElementById("cdKeyCount").value);
+            const container = document.getElementById("cdKeyContainer");
+            container.innerHTML = "";
+
+            function generateBlock(length) {
+                const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                let result = "";
+                for (let i = 0; i < length; i++) {
+                    result += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                return result;
+            }
+
+            for (let i = 0; i < count; i++) {
+                const key = `${generateBlock(5)}-${generateBlock(5)}-${generateBlock(5)}-${generateBlock(5)}`;
+                container.innerHTML += `<input type="hidden" name="CDKeys[${i}].CDkey" value="${key}" />`;
+                container.innerHTML += `<p>${key}</p>`;
+            }
+        }
+    </script>
+}

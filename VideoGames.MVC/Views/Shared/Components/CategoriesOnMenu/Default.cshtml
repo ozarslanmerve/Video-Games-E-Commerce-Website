@@ -1,14 +1,14 @@
 ﻿@model IEnumerable<CategoryModel>
 
 <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" href="#" id="kategoriDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <a class="nav-link dropdown-toggle"  style="color:mediumslateblue"  href="#" id="kategoriDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> <i class="fas fa-cubes"></i>
         Kategoriler
     </a>
-    <ul class="dropdown-menu" aria-labelledby="kategoriDropdown">
+    <ul class="dropdown-menu bg-dark border-info"  aria-labelledby="kategoriDropdown">
         @foreach (var category in Model)
         {
             <li>
-                <a class="dropdown-item"
+                <a class="dropdown-item" style="color:mediumslateblue"
                    asp-area=""
                    asp-controller="VideoGames"
                    asp-action="GetAllByCategory"

@@ -1,0 +1,42 @@
+﻿@using VideoGames.MVC.Models
+@model IEnumerable<VideoGameModel>
+
+@{
+    ViewData["Title"] = "Oyun Listesi";
+}
+
+<h2 class="mb-3">🎮 Oyun Listesi</h2>
+
+<div class="text-end mb-3">
+    <a asp-area="Admin" asp-controller="VideoGame" asp-action="Create" class="btn btn-success">
+        <i class="fa fa-plus"></i> Yeni Oyun Ekle
+    </a>
+</div>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Ad</th>
+            <th>Fiyat</th>
+            <th>Görsel</th>
+            <th>CD Key İşlemleri</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var game in Model)
+        {
+            <tr>
+                <td>@game.Name</td>
+                <td>@game.Price ₺</td>
+                <td>
+                    <img src="@Url.Content($"~/{game.ImageUrl}")" style="max-width: 100px;" alt="@game.Name" />
+                </td>
+                <td>
+                    <a asp-area="Admin" asp-controller="CDKey" asp-action="Index" asp-route-videoGameId="@game.Id" class="btn btn-sm btn-info">
+                        CD Key İşlemleri
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

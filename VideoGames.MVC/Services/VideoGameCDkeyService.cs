@@ -35,12 +35,20 @@ namespace VideoGames.MVC.Services
                 throw new Exception(string.Join(", ", result.Errors));
             }
         }
-        
+
+        public async Task<VideoGameCDkeyModel> GetAsync(int id)
+        {
+            var client = GetHttpClient();
+            var response = await client.GetAsync($"videogamecdkeys/get/{id}");
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var result = JsonSerializer.Deserialize<ResponseModel<VideoGameCDkeyModel>>(jsonString, _jsonSerializerOptions);
+            return result?.Data;
+        }
 
         public async Task<IEnumerable<VideoGameCDkeyModel>> GetCDKeysByGameIdAsync(int videoGameId)
         {
             var client = GetHttpClient();
-            var response = await client.GetAsync($"videogamecdkeys/{videoGameId}");
+            var response = await client.GetAsync($"videogamecdkeys/bygame/{videoGameId}");
             var jsonString = await response.Content.ReadAsStringAsync();
 
             var result = JsonSerializer.Deserialize<ResponseModel<IEnumerable<VideoGameCDkeyModel>>>(jsonString, _jsonSerializerOptions);

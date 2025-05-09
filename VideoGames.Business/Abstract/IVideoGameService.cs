@@ -25,6 +25,7 @@ namespace VideoGames.Business.Abstract
 
         // Yeni CDKey işlemleri
         Task<ResponseDTO<IEnumerable<VideoGameCDkeyDTO>>> GetCDkeysByGameIdAsync(int videoGameId);
+        Task<ResponseDTO<VideoGameCDkeyDTO>> GetCDkeyByIdAsync(int id);
         Task<ResponseDTO<NoContent>> AddCDkeyAsync(VideoGameCDkeyAddDTO videoGameCDkeyAddDTO);
         Task<ResponseDTO<NoContent>> UpdateCDkeyAsync(VideoGameCDkeyUpdateDTO videoGameCDkeyUpdateDTO);
         Task<ResponseDTO<NoContent>> DeleteCDkeyAsync(int id);

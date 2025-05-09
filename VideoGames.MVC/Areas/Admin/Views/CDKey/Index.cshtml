@@ -1,0 +1,32 @@
+﻿@using VideoGames.MVC.Models
+
+@model List<VideoGameCDkeyModel>
+
+<h2>CD Key Listesi</h2>
+
+<a asp-action="Add" asp-route-videoGameId="@ViewBag.VideoGameId" class="btn btn-primary mb-3">Yeni CD Key Ekle</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>CD Key</th>
+            <th>Kullanıldı mı?</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var key in Model)
+        {
+            <tr>
+                <td>@key.Id</td>
+                <td>@key.CDkey</td>
+                <td>@(key.IsUsed ? "✅" : "❌")</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@key.Id" class="btn btn-warning btn-sm">Güncelle</a>
+                    <a asp-action="Delete" asp-route-id="@key.Id" class="btn btn-danger btn-sm">Sil</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

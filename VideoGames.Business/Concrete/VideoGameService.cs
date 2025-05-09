@@ -326,6 +326,18 @@ namespace VideoGames.Business.Concrete
             return ResponseDTO<NoContent>.Success(StatusCodes.Status204NoContent);
         }
 
+        public async Task<ResponseDTO<VideoGameCDkeyDTO>> GetCDkeyByIdAsync(int id)
+        {
+            var cdKey = await _videoGameCDkeyRepository.GetByIdAsync(id);
+            if (cdKey == null)
+            {
+                return ResponseDTO<VideoGameCDkeyDTO>.Fail("CD Key bulunamadı", StatusCodes.Status404NotFound);
+            }
+
+            var dto = _mapper.Map<VideoGameCDkeyDTO>(cdKey);
+            return ResponseDTO<VideoGameCDkeyDTO>.Success(dto, StatusCodes.Status200OK);
+        }
+
         public async Task<ResponseDTO<NoContent>> UpdateCDkeyAsync(VideoGameCDkeyUpdateDTO videoGameCDkeyUpdateDTO)
         {
             var cdKey = await _videoGameCDkeyRepository.GetByIdAsync(videoGameCDkeyUpdateDTO.Id);

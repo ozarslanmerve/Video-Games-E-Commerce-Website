@@ -18,7 +18,7 @@ namespace VideoGames.API.Controllers
         }
 
         [Authorize(Roles = "AdminUser")]
-        [HttpGet("{videoGameId}")]
+        [HttpGet("bygame/{videoGameId}")]
         public async Task<IActionResult> GetCDkeysByGameId(int videoGameId)
         {
             var response = await _videoGameService.GetCDkeysByGameIdAsync(videoGameId);
@@ -30,6 +30,12 @@ namespace VideoGames.API.Controllers
         public async Task<IActionResult> Add([FromBody] VideoGameCDkeyAddDTO dto)
         {
             var response = await _videoGameService.AddCDkeyAsync(dto);
+            return CreateResponse(response);
+        }   
+        [HttpGet("get/{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var response = await _videoGameService.GetCDkeyByIdAsync(id);
             return CreateResponse(response);
         }
 
@@ -48,6 +54,7 @@ namespace VideoGames.API.Controllers
             var response = await _videoGameService.DeleteCDkeyAsync(id);
             return CreateResponse(response);
         }
+   
     }
 
 }

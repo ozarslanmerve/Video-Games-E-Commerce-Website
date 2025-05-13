@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+ï»¿using Microsoft.EntityFrameworkCore;
 using VideoGames.Data.Abstract;
 using VideoGames.Data.Concrete.Repositories;
 using VideoGames.Data.Concrete;
@@ -52,7 +52,7 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 
 
-#region Identity Ayarlarý
+#region Identity Ayarlarï¿½
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
 {
     options.Password.RequireDigit = true;
@@ -71,7 +71,7 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
 #endregion
 
 
-#region JWT Ayarlarý
+#region JWT Ayarlarï¿½
 builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection("JwtConfig"));
 JwtConfig jwtConfig = builder.Configuration.GetSection("JwtConfig").Get<JwtConfig>();
 
@@ -83,13 +83,13 @@ builder.Services.AddAuthentication(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
     {
-        ValidateIssuer = true, 
-        ValidateAudience = true, 
-        ValidateLifetime = true, 
-        ValidateIssuerSigningKey = true, 
-        ValidIssuer = jwtConfig?.Issuer, 
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtConfig?.Issuer,
         ValidAudience = jwtConfig?.Audience,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig?.Secret ?? "")),    
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig?.Secret ?? "")),
     };
 });
 

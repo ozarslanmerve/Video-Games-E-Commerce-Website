@@ -16,6 +16,16 @@ html {
     position: relative;
     min-height: 100%;
 }
+#loginAlign {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 110px;
+    transition: padding-top 0.3s ease;
+    text-align: center;
+}
+
 #mainContent {
     display: flex;
     flex-direction: column;
@@ -58,4 +68,28 @@ html {
     height: 80px;
     object-fit: cover;
     filter: drop-shadow(0 0 10px #dc41f3);
+}
+
+.input {
+    height: 40px;
+    border-radius: 8px;
+    border: 2px solid hsl(236, 92%, 66%);
+    outline: none;
+    transition: 200ms ease-in;
+    padding-left: 1rem;
+}
+
+    .input:focus {
+        border-bottom: 4px solid hsl(236, 92%, 66%);
+        padding-top: 2px;
+    }
+
+    .input::placeholder {
+        color: hsl(236, 92%, 66%);
+        opacity: 0.5;
+    }
+
+
+.form-group{
+    padding-top: 10px;
 }

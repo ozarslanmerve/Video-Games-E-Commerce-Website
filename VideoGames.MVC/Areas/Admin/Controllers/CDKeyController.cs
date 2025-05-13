@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using VideoGames.MVC.Abstract;
 using VideoGames.MVC.Models;
@@ -10,10 +11,12 @@ namespace VideoGames.MVC.Areas.Admin.Controllers
     public class CDKeyController : Controller
     {
         private readonly IVideoGameCDkeyService _cdKeyService;
+       
 
-        public CDKeyController(IVideoGameCDkeyService cdKeyService)
+        public CDKeyController(IVideoGameCDkeyService cdKeyService )
         {
             _cdKeyService = cdKeyService;
+           
         }
 
         public async Task<IActionResult> Index(int videoGameId)
@@ -46,11 +49,25 @@ namespace VideoGames.MVC.Areas.Admin.Controllers
         public async Task<IActionResult> Edit(VideoGameCDkeyModel model)
         {
             if (!ModelState.IsValid)
+            {
+                ViewBag.VideoGameId = model.VideoGameId;
                 return View(model);
+            }
 
-            await _cdKeyService.UpdateCDKeyAsync(model);
-            return RedirectToAction("Index", new { videoGameId = model.VideoGameId });
+
+            try
+            {
+                await _cdKeyService.UpdateCDKeyAsync(model);
+                return RedirectToAction("Index", new { videoGameId = model.VideoGameId });
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "Güncelleme sırasında bir hata oluştu: " + ex.Message);
+                ViewBag.VideoGameId = model.VideoGameId;
+                return View(model);
+            }
         }
+
 
 
 

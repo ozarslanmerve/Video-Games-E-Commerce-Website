@@ -49,10 +49,28 @@ namespace VideoGames.MVC.Services
         {
             var client = GetHttpClient();
             var response = await client.GetAsync($"videogamecdkeys/bygame/{videoGameId}");
+
             var jsonString = await response.Content.ReadAsStringAsync();
 
-            var result = JsonSerializer.Deserialize<ResponseModel<IEnumerable<VideoGameCDkeyModel>>>(jsonString, _jsonSerializerOptions);
-            return result?.Data ?? new List<VideoGameCDkeyModel>();
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"API başarısız yanıt verdi: {response.StatusCode} - {jsonString}");
+            }
+
+            if (string.IsNullOrWhiteSpace(jsonString))
+            {
+                return new List<VideoGameCDkeyModel>();
+            }
+
+            try
+            {
+                var result = JsonSerializer.Deserialize<ResponseModel<IEnumerable<VideoGameCDkeyModel>>>(jsonString, _jsonSerializerOptions);
+                return result?.Data ?? new List<VideoGameCDkeyModel>();
+            }
+            catch (JsonException ex)
+            {
+                throw new Exception("JSON parse hatası: " + ex.Message);
+            }
         }
 
         public async Task UpdateCDKeyAsync(VideoGameCDkeyModel model)

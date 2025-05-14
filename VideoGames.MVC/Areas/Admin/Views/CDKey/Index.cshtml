@@ -4,9 +4,9 @@
 
 <h2>CD Key Listesi</h2>
 
-<a asp-action="Add" asp-route-videoGameId="@ViewBag.VideoGameId" class="btn btn-primary mb-3">Yeni CD Key Ekle</a>
+<a asp-action="Add" asp-route-videoGameId="@ViewBag.VideoGameId" class="button"><i class="fas fa-plus"></i> Yeni CD Key Ekle</a>
 
-<table class="table table-bordered">
+<table class="table table-bordered table-dark">
     <thead>
         <tr>
             <th>ID</th>
@@ -23,8 +23,8 @@
                 <td>@key.CDkey</td>
                 <td>@(key.IsUsed ? "✅" : "❌")</td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@key.Id" class="btn btn-warning btn-sm">Güncelle</a>
-                    <a asp-action="Delete" asp-route-id="@key.Id" class="btn btn-danger btn-sm">Sil</a>
+                    <a asp-action="Edit" asp-route-id="@key.Id" class="button"> Güncelle </a>
+                    <a asp-action="Delete" asp-route-id="@key.Id" class="button"> Sil </a>
                 </td>
             </tr>
         }

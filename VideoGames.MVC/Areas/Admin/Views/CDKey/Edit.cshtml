@@ -12,10 +12,10 @@
     <input type="hidden" asp-for="VideoGameId" />
 
     <div class="form-group mb-3">
-        <label>CD Key</label>
-        <input asp-for="CDkey" class="form-control" />
+        <label>CD Key: </label>
+        <input asp-for="CDkey" class="inputCDKey" />
     </div>
 
-    <button type="submit" class="btn btn-primary">Güncelle</button>
+    <button type="submit" class="button">Güncelle</button>
     <a asp-area="Admin" asp-controller="CDKey" asp-action="Index" asp-route-videoGameId="@videoGameId" class="btn btn-secondary">Geri Dön</a>
 </form>

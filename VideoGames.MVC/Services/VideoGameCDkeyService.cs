@@ -27,14 +27,26 @@ namespace VideoGames.MVC.Services
         {
             var client = GetHttpClient();
             var response = await client.DeleteAsync($"videogamecdkeys/{id}");
-            var jsonString = await response.Content.ReadAsStringAsync();
 
-            var result = JsonSerializer.Deserialize<ResponseModel<string>>(jsonString, _jsonSerializerOptions);
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                throw new Exception($"Silme başarısız: {response.StatusCode} - {errorMessage}");
+            }
+
+            var content = await response.Content.ReadAsStringAsync();
+        
+            if (string.IsNullOrWhiteSpace(content))
+            {
+                return; 
+            }
+            var result = JsonSerializer.Deserialize<ResponseModel<string>>(content, _jsonSerializerOptions);
             if (result?.Errors != null && result.Errors.Count > 0)
             {
                 throw new Exception(string.Join(", ", result.Errors));
             }
         }
+
 
         public async Task<VideoGameCDkeyModel> GetAsync(int id)
         {

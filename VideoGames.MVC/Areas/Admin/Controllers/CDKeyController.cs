@@ -68,6 +68,19 @@ namespace VideoGames.MVC.Areas.Admin.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var key = await _cdKeyService.GetAsync(id);
+            if (key == null)
+            {
+                return NotFound();
+            }
+            await _cdKeyService.DeleteCDKeyAsync(id);
+            return RedirectToAction("Index", new { videoGameId = key.VideoGameId });
+        }   
+
+
 
 
 

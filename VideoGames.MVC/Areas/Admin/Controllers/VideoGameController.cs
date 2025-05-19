@@ -36,5 +36,36 @@ namespace VideoGames.MVC.Areas.Admin.Controllers
             await _videoGameService.AddAsync(model);
             return RedirectToAction("Create");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var game = await _videoGameService.GetAsync(id);
+            if (game == null)
+                return NotFound();
+
+            var model = new VideoGameUpdateModel
+            {
+                Id = game.Id,
+                Name = game.Name,
+                Description = game.Description,
+                Price = game.Price,
+                HasAgeLimit = game.HasAgeLimit,
+                CategoryIds = game.Categories.Select(c => c.Id).ToList()
+            };
+
+            ViewBag.ImageUrl = game.ImageUrl; // Opsiyonel: Mevcut görseli göstermek için
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(VideoGameUpdateModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            await _videoGameService.UpdateAsync(model);
+            return RedirectToAction("Index");
+        }
     }
 }

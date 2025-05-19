@@ -224,21 +224,29 @@ namespace VideoGames.MVC.Services
             form.Add(new StringContent(model.Price.ToString()), "Price");
             form.Add(new StringContent(model.HasAgeLimit.ToString()), "HasAgeLimit");
 
-            // Yeni görsel varsa ekle
             if (model.Image != null)
             {
                 var imageContent = new StreamContent(model.Image.OpenReadStream());
                 form.Add(imageContent, "Image", model.Image.FileName);
             }
 
-            // Kategorileri dizi halinde form verisine ekle
             foreach (var categoryId in model.CategoryIds)
             {
                 form.Add(new StringContent(categoryId.ToString()), "CategoryIds");
             }
 
             var response = await client.PutAsync("videogames", form);
+
+            
+            if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
+                return;
+
             var jsonString = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"Sunucu hatası: {response.StatusCode} - {jsonString}");
+            }
 
             var result = JsonSerializer.Deserialize<ResponseModel<VideoGameModel>>(jsonString, _jsonSerializerOptions);
 
@@ -247,6 +255,7 @@ namespace VideoGames.MVC.Services
                 throw new Exception(string.Join(", ", result.Errors));
             }
         }
+
 
 
     }

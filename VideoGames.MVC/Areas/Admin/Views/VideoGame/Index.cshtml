@@ -19,7 +19,7 @@
             <th>Ad</th>
             <th>Fiyat</th>
             <th>Görsel</th>
-            <th>CD Key İşlemleri</th>
+            <th>İşlemler</th>
         </tr>
     </thead>
     <tbody>
@@ -32,10 +32,12 @@
                     <img src="@Url.Content($"~/{game.ImageUrl}")" style="max-width: 100px;" alt="@game.Name" />
                 </td>
                 <td>
-                    <a asp-area="Admin" asp-controller="CDKey" asp-action="Index" asp-route-videoGameId="@game.Id" class="btn btn-sm btn-info">
-                        CD Key İşlemleri
-                    </a>
+                    <a asp-area="Admin" asp-controller="VideoGame" asp-action="Edit" asp-route-id="@game.Id" class="btn btn-sm btn-warning">Güncelle</a>
+                    <a asp-area="Admin" asp-controller="VideoGame" asp-action="Delete" asp-route-id="@game.Id" class="btn btn-sm btn-danger">Sil</a>
+                    <a asp-area="Admin" asp-controller="CDKey" asp-action="Index" asp-route-videoGameId="@game.Id" class="btn btn-sm btn-info">CD Key İşlemleri</a>
                 </td>
+
+
             </tr>
         }
     </tbody>

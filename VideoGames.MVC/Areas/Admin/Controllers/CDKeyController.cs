@@ -11,12 +11,12 @@ namespace VideoGames.MVC.Areas.Admin.Controllers
     public class CDKeyController : Controller
     {
         private readonly IVideoGameCDkeyService _cdKeyService;
-       
 
-        public CDKeyController(IVideoGameCDkeyService cdKeyService )
+
+        public CDKeyController(IVideoGameCDkeyService cdKeyService)
         {
             _cdKeyService = cdKeyService;
-           
+
         }
 
         public async Task<IActionResult> Index(int videoGameId)
@@ -76,12 +76,11 @@ namespace VideoGames.MVC.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            await _cdKeyService.DeleteCDKeyAsync(id);
+
+            await _cdKeyService.DeleteCDKeyAsync(id); // Soft delete - IsDeleted=true yapıyor
             return RedirectToAction("Index", new { videoGameId = key.VideoGameId });
-        }   
 
-
-
+        }
 
 
     }

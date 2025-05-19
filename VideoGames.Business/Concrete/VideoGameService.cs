@@ -295,7 +295,7 @@ namespace VideoGames.Business.Concrete
 
         public async Task<ResponseDTO<IEnumerable<VideoGameCDkeyDTO>>> GetCDkeysByGameIdAsync(int videoGameId)
         {
-            var cdKeys = await _videoGameCDkeyRepository.GetAllAsync(k => k.VideoGameId == videoGameId);
+            var cdKeys = await _videoGameCDkeyRepository.GetAllAsync(k => k.VideoGameId == videoGameId && !k.IsDeleted);
 
             if (cdKeys == null || !cdKeys.Any())
             {
@@ -366,18 +366,20 @@ namespace VideoGames.Business.Concrete
             var cdKey = await _videoGameCDkeyRepository.GetByIdAsync(id);
             if (cdKey == null)
             {
-                return ResponseDTO<NoContent>.Fail("CD Key bulunamadı", StatusCodes.Status404NotFound);
+                return ResponseDTO<NoContent>.Fail("CD Key bulunamadı", 404);
             }
 
-            _videoGameCDkeyRepository.Delete(cdKey);
-            var result = await _unitOfWork.SaveChangesAsync();
+            cdKey.IsDeleted = true; // ❗ soft delete
+            _videoGameCDkeyRepository.Update(cdKey);
 
+            var result = await _unitOfWork.SaveChangesAsync();
             if (result <= 0)
             {
-                return ResponseDTO<NoContent>.Fail("CD Key silinemedi", StatusCodes.Status500InternalServerError);
+                return ResponseDTO<NoContent>.Fail("CD Key silinemedi", 500);
             }
 
-            return ResponseDTO<NoContent>.Success(StatusCodes.Status204NoContent);
+            return ResponseDTO<NoContent>.Success(204);
         }
+
     }
 }

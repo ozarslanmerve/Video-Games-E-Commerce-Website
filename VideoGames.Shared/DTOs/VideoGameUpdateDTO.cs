@@ -16,6 +16,6 @@ namespace VideoGames.Shared.DTOs
         public bool HasAgeLimit { get; set; }
         public int[] CategoryIds { get; set; } = [];
 
-        public IFormFile Image { get; set; }
+        public IFormFile? Image { get; set; }
     }
 }

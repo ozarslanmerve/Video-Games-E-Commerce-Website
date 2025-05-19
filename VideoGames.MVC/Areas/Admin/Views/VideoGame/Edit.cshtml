@@ -1,0 +1,38 @@
+﻿@model VideoGames.MVC.Models.VideoGameUpdateModel
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Price"></label>
+        <input asp-for="Price" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="HasAgeLimit" class="form-check-input" type="checkbox" />
+        <label asp-for="HasAgeLimit" class="form-check-label"></label>
+    </div>
+
+    <div class="mb-3">
+        <label>Yeni Görsel:</label>
+        <input asp-for="Image" class="form-control" type="file" />
+        @if (ViewBag.ImageUrl != null)
+        {
+            <img src="~/@ViewBag.ImageUrl" style="max-width: 150px;" />
+        }
+    </div>
+
+    @* Eğer kategori checkbox’ları ViewBag’den gelirse burada listelenebilir *@
+
+    <button type="submit" class="btn btn-primary">Güncelle</button>
+</form>

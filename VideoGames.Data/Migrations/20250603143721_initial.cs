@@ -66,8 +66,7 @@ namespace VideoGames.Data.Migrations
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -379,8 +378,8 @@ namespace VideoGames.Data.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "Address", "City", "ConcurrencyStamp", "DateOfBirth", "Email", "EmailConfirmed", "FirstName", "Gender", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "14a0183f-1e96-4930-a83d-6ef5f22d8c09", 0, "", "", "d60cc93a-b1a1-4144-80c2-f02b771df5cf", new DateTime(2025, 5, 1, 15, 23, 2, 119, DateTimeKind.Local).AddTicks(3324), "normaluser@gmail.com", true, "Normal", 1, "User", false, null, "NORMALUSER@GMAIL.COM", "NORMALUSER@GMAIL.COM", "AQAAAAIAAYagAAAAEM3SM9N+tr00F93hCt5QGT7jjTlLJt3MmsiSE4dSPCIij3pQj8QDPi/Dthg7daLy1w==", "", false, "5e9405bd-9317-4f5c-ae71-9fd20fc3fc09", false, "normaluser@gmail.com" },
-                    { "c0b7fef7-df2b-4857-9b3d-bc8967ad19ac", 0, "", "", "e0a388c0-324b-4ba4-af32-f792ac386a81", new DateTime(2025, 5, 1, 15, 23, 2, 48, DateTimeKind.Local).AddTicks(9949), "adminuser@gmail.com", true, "Admin", 1, "User", false, null, "ADMINUSER@GMAIL.COM", "ADMINUSER@GMAIL.COM", "AQAAAAIAAYagAAAAEB+KJXSkDk8Lt6gWxNoZ3gPJ34d+MHORXoItixdsMfVcdUE+CrcEhK3Jf4QdIYsaUQ==", "", false, "539c35c9-440d-44a9-8d98-b69f22c556a4", false, "adminuser@gmail.com" }
+                    { "14a0183f-1e96-4930-a83d-6ef5f22d8c09", 0, "", "", "29315383-7595-4950-8336-147cb69a6d27", new DateTime(2025, 6, 3, 17, 37, 20, 648, DateTimeKind.Local).AddTicks(7388), "normaluser@gmail.com", true, "Normal", 1, "User", false, null, "NORMALUSER@GMAIL.COM", "NORMALUSER@GMAIL.COM", "AQAAAAIAAYagAAAAEMU/KHumo8o57N/RKG4ylncvyVtJGGsMDYFFapwfGvh3im54pm9s8TpEeF6AtJSIDA==", "", false, "0efe3937-3b08-47e3-991c-fb45e1089cb2", false, "normaluser@gmail.com" },
+                    { "c0b7fef7-df2b-4857-9b3d-bc8967ad19ac", 0, "", "", "b6473a88-8791-47f7-b11c-3fb0a23d38a4", new DateTime(2025, 6, 3, 17, 37, 20, 602, DateTimeKind.Local).AddTicks(2788), "adminuser@gmail.com", true, "Admin", 1, "User", false, null, "ADMINUSER@GMAIL.COM", "ADMINUSER@GMAIL.COM", "AQAAAAIAAYagAAAAEJ1y74YoDT8f0DC56jO8aL76tb1tnyo6PB2Dxfeo62jjgY0czP6H+1oA2Zp99rOsTg==", "", false, "c566c03d-3bac-4fd3-95de-0b880f42c6e9", false, "adminuser@gmail.com" }
                 });
 
             migrationBuilder.InsertData(

@@ -10,8 +10,7 @@ namespace VideoGames.Entity.Concrete
     public class Category:BaseEntity
     {
         public string Name { get; set; }
-        public string Description { get; set; }
-        public string ImageUrl { get; set; }
+        public string Description { get; set; }      
         public ICollection<VideoGameCategory> VideoGameCategories { get; set; } = new HashSet<VideoGameCategory>();
     }
 }

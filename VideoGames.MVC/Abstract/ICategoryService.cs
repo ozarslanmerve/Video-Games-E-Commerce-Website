@@ -7,7 +7,7 @@ namespace VideoGames.MVC.Abstract
         Task<IEnumerable<CategoryModel>> GetCategoriesAsync();
         Task<CategoryModel> GetCategoryAsync(int id);
         Task<int> GetCategoryCountAsync();
-        Task<CategoryModel> AddCategoryAsync(CategoryModel model);
+        Task<CategoryModel> AddCategoryAsync(CategoryCreateModel model);
         Task UpdateCategoryAsync(CategoryModel model);
         Task DeleteCategoryAsync(int id);
     }

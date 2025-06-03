@@ -7,6 +7,7 @@ namespace VideoGames.MVC.Models
         [JsonProperty("id")]
         public int Id { get; set; }
 
+        
         [JsonProperty("name")]
         public string Name { get; set; }
 
@@ -21,5 +22,7 @@ namespace VideoGames.MVC.Models
 
         [JsonProperty("productCount")]
         public int ProductCount { get; set; }
+
+       
     }
 }

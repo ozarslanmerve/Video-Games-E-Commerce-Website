@@ -12,7 +12,7 @@ using VideoGames.Data.Concrete.Contexts;
 namespace VideoGames.Data.Migrations
 {
     [DbContext(typeof(VideoGamesDbContext))]
-    [Migration("20250501122302_initial")]
+    [Migration("20250603143721_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -283,8 +283,8 @@ namespace VideoGames.Data.Migrations
                             AccessFailedCount = 0,
                             Address = "",
                             City = "",
-                            ConcurrencyStamp = "e0a388c0-324b-4ba4-af32-f792ac386a81",
-                            DateOfBirth = new DateTime(2025, 5, 1, 15, 23, 2, 48, DateTimeKind.Local).AddTicks(9949),
+                            ConcurrencyStamp = "b6473a88-8791-47f7-b11c-3fb0a23d38a4",
+                            DateOfBirth = new DateTime(2025, 6, 3, 17, 37, 20, 602, DateTimeKind.Local).AddTicks(2788),
                             Email = "adminuser@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -293,10 +293,10 @@ namespace VideoGames.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMINUSER@GMAIL.COM",
                             NormalizedUserName = "ADMINUSER@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEB+KJXSkDk8Lt6gWxNoZ3gPJ34d+MHORXoItixdsMfVcdUE+CrcEhK3Jf4QdIYsaUQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJ1y74YoDT8f0DC56jO8aL76tb1tnyo6PB2Dxfeo62jjgY0czP6H+1oA2Zp99rOsTg==",
                             PhoneNumber = "",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "539c35c9-440d-44a9-8d98-b69f22c556a4",
+                            SecurityStamp = "c566c03d-3bac-4fd3-95de-0b880f42c6e9",
                             TwoFactorEnabled = false,
                             UserName = "adminuser@gmail.com"
                         },
@@ -306,8 +306,8 @@ namespace VideoGames.Data.Migrations
                             AccessFailedCount = 0,
                             Address = "",
                             City = "",
-                            ConcurrencyStamp = "d60cc93a-b1a1-4144-80c2-f02b771df5cf",
-                            DateOfBirth = new DateTime(2025, 5, 1, 15, 23, 2, 119, DateTimeKind.Local).AddTicks(3324),
+                            ConcurrencyStamp = "29315383-7595-4950-8336-147cb69a6d27",
+                            DateOfBirth = new DateTime(2025, 6, 3, 17, 37, 20, 648, DateTimeKind.Local).AddTicks(7388),
                             Email = "normaluser@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Normal",
@@ -316,10 +316,10 @@ namespace VideoGames.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "NORMALUSER@GMAIL.COM",
                             NormalizedUserName = "NORMALUSER@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEM3SM9N+tr00F93hCt5QGT7jjTlLJt3MmsiSE4dSPCIij3pQj8QDPi/Dthg7daLy1w==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEMU/KHumo8o57N/RKG4ylncvyVtJGGsMDYFFapwfGvh3im54pm9s8TpEeF6AtJSIDA==",
                             PhoneNumber = "",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "5e9405bd-9317-4f5c-ae71-9fd20fc3fc09",
+                            SecurityStamp = "0efe3937-3b08-47e3-991c-fb45e1089cb2",
                             TwoFactorEnabled = false,
                             UserName = "normaluser@gmail.com"
                         });
@@ -394,10 +394,6 @@ namespace VideoGames.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()

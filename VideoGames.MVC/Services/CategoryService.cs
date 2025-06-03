@@ -67,15 +67,34 @@ namespace VideoGames.MVC.Services
             return result?.Data ?? 0;
         }
 
-        public async Task<CategoryModel> AddCategoryAsync(CategoryModel model)
+        public async Task<CategoryModel> AddCategoryAsync(CategoryCreateModel model)
         {
             var client = GetHttpClient();
+
             var response = await client.PostAsJsonAsync("categories", model);
             var json = await response.Content.ReadAsStringAsync();
 
+          
             var result = JsonSerializer.Deserialize<ResponseModel<CategoryModel>>(json, _jsonSerializerOptions);
-            return result?.Data!;
+
+            if (result == null)
+            {
+                throw new Exception("Sunucudan beklenmeyen bir yanıt alındı.");
+            }
+
+            if (result.Errors != null && result.Errors.Any())
+            {
+                throw new Exception("Ekleme sırasında hata oluştu: " + string.Join(", ", result.Errors));
+            }
+
+            if (result.Data == null)
+            {
+                throw new Exception("Kategori eklenemedi, sunucu veri döndürmedi.");
+            }
+
+            return result.Data;
         }
+
 
         public async Task UpdateCategoryAsync(CategoryModel model)
         {
